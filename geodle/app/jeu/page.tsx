@@ -72,22 +72,38 @@ export default function GamePage() {
   }, [jsonData, cityDataMap, type]);
 
   const handleGuess = () => {
-    if (
-      randomCity &&
-      guess.toLowerCase() === randomCity.nom_commune.toLowerCase()
-    ) {
-      setIsCorrect(true);
+    //CHECK SI GUESS EST UN NOM DE VILLE VALIDE
+    const isCityMatched =
+      jsonData &&
+      jsonData.some(
+        (city) => city.nom_commune.toLowerCase() === guess.toLowerCase()
+      );
+    if (isCityMatched) {
+      const matchedCity = jsonData!.find(
+        (city) => city.nom_commune.toLowerCase() === guess.toLowerCase()
+      );
+
+      const matchedCityPosition: [number, number] = [
+        parseFloat(matchedCity!.geo_point_2d.lat),
+        parseFloat(matchedCity!.geo_point_2d.lon),
+      ];
+
       const newMarker: Markers = {
-        position: [
-          parseFloat(randomCity.additionalData!.latitude),
-          parseFloat(randomCity.additionalData!.longitude),
-        ],
-        nom_commune: randomCity.nom_commune,
+        position: matchedCityPosition,
+        nom_commune: matchedCity!.nom_commune,
       };
 
       setMarkers((prevMarkers) =>
         prevMarkers ? [...prevMarkers, newMarker] : [newMarker]
       );
+    }
+
+    //RESULTAT
+    if (
+      randomCity &&
+      guess.toLowerCase() === randomCity.nom_commune.toLowerCase()
+    ) {
+      setIsCorrect(true);
     } else {
       setIsCorrect(false);
     }

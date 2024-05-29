@@ -17,7 +17,7 @@ export default function MyMap({ position, zoom, markers }: MyMapProps) {
       />
       {markers.map((marker, index) => (
         <Marker key={index} position={marker.position}>
-          <Popup>{`Attempt ${index + 1}`}</Popup>
+          <Popup>{`Attempt ${marker.nom_commune}`}</Popup>
         </Marker>
       ))}
     </MapContainer>
