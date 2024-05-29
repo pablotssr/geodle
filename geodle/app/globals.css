@@ -10,6 +10,11 @@
 div .leaflet-container{
   height: 100vh;
 }
+.suggestions-container .suggestion:hover,
+.suggestions-container .suggestion.selected {
+  color: #ff5!important; /* Change to your desired background color */
+}
+
 input{
   color: black
 }

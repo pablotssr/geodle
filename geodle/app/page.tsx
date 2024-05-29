@@ -1,18 +1,8 @@
-'use client';
-import dynamic from 'next/dynamic.js';
-import { useMemo
-
- } from 'react';
-  export default function MyPage() {
-  const Map = useMemo(() => dynamic(
-    () => import('./components/map'),
-    { 
-      loading: () => <p>A map is loading</p>,
-      ssr: false
-    }
-  ), [])
-
-  return <div>
-    <Map  />
-  </div>
+export default function HomePage() {
+  return (
+    <div>
+      <h1>Welcome to the City Guessing Game</h1>
+      <a href="/menu">Go to Menu</a>
+    </div>
+  );
 }

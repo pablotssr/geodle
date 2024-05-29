@@ -1,5 +1,6 @@
-'use client';
-import React, { useEffect, useState } from 'react';
+'use client';import React, { useEffect, useState, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import '../globals.css';
 
 interface City {
   gid: string;
@@ -22,12 +23,20 @@ interface CityAdditionalData {
   region_geojson_name: string;
 }
 
-export default function ExamplePage() {
+export default function GamePage() {
+  const searchParams = useSearchParams();
+  const type = searchParams.get('type');
+
   const [jsonData, setJsonData] = useState<City[] | null>(null);
   const [cityDataMap, setCityDataMap] = useState<Map<string, CityAdditionalData>>(new Map());
   const [randomCity, setRandomCity] = useState<City | null>(null);
   const [guess, setGuess] = useState<string>('');
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState<number>(-1);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -49,12 +58,18 @@ export default function ExamplePage() {
 
   useEffect(() => {
     if (jsonData && cityDataMap.size > 0) {
-      const randomIndex = Math.floor(Math.random() * jsonData.length);
-      const randomCityData = jsonData[randomIndex];
+      let filteredCities = jsonData;
+      if (type === 'Prefecture') {
+        filteredCities = jsonData.filter(city => city.type === 'Préfecture');
+      } else if (type === 'SousPrefecture') {
+        filteredCities = jsonData.filter(city => city.type === 'Sous-préfecture');
+      }
+      const randomIndex = Math.floor(Math.random() * filteredCities.length);
+      const randomCityData = filteredCities[randomIndex];
       const additionalData = cityDataMap.get(randomCityData.insee_commune);
       setRandomCity({ ...randomCityData, additionalData });
     }
-  }, [jsonData, cityDataMap]);
+  }, [jsonData, cityDataMap, type]);
 
   const handleGuess = () => {
     if (randomCity && guess.toLowerCase() === randomCity.nom_commune.toLowerCase()) {
@@ -65,7 +80,45 @@ export default function ExamplePage() {
   };
 
   const handleGuessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setGuess(event.target.value);
+    const value = event.target.value.toLowerCase();
+    setGuess(value);
+    if (value.trim() !== '') {
+      const filteredSuggestions = jsonData
+        ? jsonData.map(city => city.nom_commune.toLowerCase()).filter(city => city.startsWith(value))
+        : [];
+      setSuggestions(filteredSuggestions);
+      setShowSuggestions(true);
+      setSelectedSuggestionIndex(-1); // Reset selected suggestion index when input value changes
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      setSelectedSuggestionIndex(prevIndex => (prevIndex < suggestions.length - 1 ? prevIndex + 1 : prevIndex));
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      setSelectedSuggestionIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
+    } else if (event.key === 'Enter' && selectedSuggestionIndex !== -1) {
+      event.preventDefault();
+      setGuess(suggestions[selectedSuggestionIndex]);
+      setShowSuggestions(false);
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }
+  };
+
+  const handleSuggestionClick = (suggestion: string, index: number) => {
+    setGuess(suggestion);
+    setShowSuggestions(false);
+    setSelectedSuggestionIndex(-1); // Reset selected suggestion index
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   };
 
   return (
@@ -73,24 +126,46 @@ export default function ExamplePage() {
       <h2>Guess the City</h2>
       {randomCity && (
         <div>
-          <p>Ville: {randomCity.nom_commune}</p>
+          <p>City: {randomCity.nom_commune}</p>
+          <p>Code Insee: {randomCity.insee_commune}</p>
+          {randomCity.type === 'Sous-préfecture' && randomCity.additionalData && (
+            <p>Department: {randomCity.additionalData.department_number}</p>
+          )}
           {randomCity.additionalData && (
             <div>
-              <p>Code Postal: {randomCity.additionalData.zip_code}</p>
-              <p>Type: {randomCity.type}</p>
-              <p>Nom departement: {randomCity.additionalData.department_name}</p>
-              <p>n° departement: {randomCity.additionalData.department_number}</p>
-              <p>Région: {randomCity.additionalData.region_geojson_name}</p>
+              <p>City Code: {randomCity.additionalData.city_code}</p>
+              <p>Zip Code: {randomCity.additionalData.zip_code}</p>
+              <p>Department: {randomCity.additionalData.department_name}</p>
+              <p>Region: {randomCity.additionalData.region_name}</p>
             </div>
           )}
           <input
+            ref={inputRef}
             type="text"
             value={guess}
             onChange={handleGuessChange}
+            onKeyDown={handleKeyDown} // Add keydown event listener
           />
           <button onClick={handleGuess}>Check</button>
           {isCorrect !== null && (
             <p>{isCorrect ? 'Yes, that\'s correct!' : 'No, try again.'}</p>
+          )}
+          {showSuggestions && (
+            <div
+              className="suggestions-container"
+              ref={suggestionsRef}
+            >
+              {suggestions.map((suggestion, index) => (
+                <div
+                key={index}
+                className={`suggestion ${selectedSuggestionIndex === index ? 'selected' : ''}`}
+                onClick={() => handleSuggestionClick(suggestion, index)}
+              >
+                {suggestion}
+              </div>
+              
+              ))}
+            </div>
           )}
         </div>
       )}
