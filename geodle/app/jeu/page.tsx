@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 
 interface City {
-  zip_code: string;
-  city_code: string;
-  department_number: string;
+  gid: string;
+  nom_commune: string;
+  insee_commune: string;
 }
 
 export default function ExamplePage() {
@@ -15,9 +15,9 @@ export default function ExamplePage() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch('/cities.json');
+      const response = await fetch('/prefsSousPrefs.json');
       const data = await response.json();
-      setJsonData(data.cities);
+      setJsonData(data);
     }
     fetchData();
   }, []);
@@ -31,7 +31,7 @@ export default function ExamplePage() {
   }, [jsonData]);
 
   const handleGuess = () => {
-    if (randomCity && guess.toLowerCase() === randomCity.city_code.toLowerCase()) {
+    if (randomCity && guess.toLowerCase() === randomCity.nom_commune.toLowerCase()) {
       setIsCorrect(true);
     } else {
       setIsCorrect(false);
@@ -47,7 +47,7 @@ export default function ExamplePage() {
       <h2>Guess the City</h2>
       {randomCity && (
         <div>
-          <p>Guess the city: {randomCity.city_code}</p>
+          <p>Guess the city: {randomCity.nom_commune}</p>
           <input
             type="text"
             value={guess}
