@@ -13,9 +13,5 @@ export default function MyPage() {
 
   const position = [46.603354, 1.888334];
 
-  return (
-    <div>
-      <Map position={position} zoom="6" />
-    </div>
-  );
+  return <div>{/* <Map position={position} zoom="6" /> */}</div>;
 }

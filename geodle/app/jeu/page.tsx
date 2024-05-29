@@ -1,45 +1,32 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-
-interface City {
-  gid: string;
-  nom_commune: string;
-  insee_commune: string;
-  type: string;
-  additionalData?: CityAdditionalData;
-}
-
-interface CityAdditionalData {
-  insee_code: string;
-  city_code: string;
-  zip_code: string;
-  label: string;
-  latitude: string;
-  longitude: string;
-  department_name: string;
-  department_number: string;
-  region_name: string;
-  region_geojson_name: string;
-}
+"use client";
+import React, { useEffect, useState } from "react";
+import MyMap from "../components/map";
+import { CityAdditionalData, City, Markers } from "../lib/definitions";
 
 export default function ExamplePage() {
+  const [markers, setMarkers] = useState<Markers[] | null>(null);
+
   const [jsonData, setJsonData] = useState<City[] | null>(null);
-  const [cityDataMap, setCityDataMap] = useState<Map<string, CityAdditionalData>>(new Map());
+  const [cityDataMap, setCityDataMap] = useState<
+    Map<string, CityAdditionalData>
+  >(new Map());
   const [randomCity, setRandomCity] = useState<City | null>(null);
-  const [guess, setGuess] = useState<string>('');
+  const [guess, setGuess] = useState<string>("");
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch('/prefsSousPrefs.json');
+      const response = await fetch("/prefsSousPrefs.json");
       const data = await response.json();
       setJsonData(data);
     }
 
     async function fetchCities() {
-      const response = await fetch('/cities.json');
+      const response = await fetch("/cities.json");
       const data = await response.json();
-      const cityMap: Map<string, CityAdditionalData> = new Map(data.cities.map((city: CityAdditionalData) => [city.insee_code, city]));
+      const cityMap: Map<string, CityAdditionalData> = new Map(
+        data.cities.map((city: CityAdditionalData) => [city.insee_code, city])
+      );
       setCityDataMap(cityMap);
     }
 
@@ -53,12 +40,37 @@ export default function ExamplePage() {
       const randomCityData = jsonData[randomIndex];
       const additionalData = cityDataMap.get(randomCityData.insee_commune);
       setRandomCity({ ...randomCityData, additionalData });
+      if (randomCityData && additionalData) {
+        const newMarker: Markers = {
+          position: [
+            parseFloat(additionalData.latitude),
+            parseFloat(additionalData.longitude),
+          ],
+          nom_commune: randomCityData.nom_commune,
+        };
+
+        setMarkers([newMarker]);
+      }
     }
   }, [jsonData, cityDataMap]);
 
   const handleGuess = () => {
-    if (randomCity && guess.toLowerCase() === randomCity.nom_commune.toLowerCase()) {
+    if (
+      randomCity &&
+      guess.toLowerCase() === randomCity.nom_commune.toLowerCase()
+    ) {
       setIsCorrect(true);
+      const newMarker: Markers = {
+        position: [
+          parseFloat(randomCity.additionalData!.latitude),
+          parseFloat(randomCity.additionalData!.longitude),
+        ],
+        nom_commune: randomCity.nom_commune,
+      };
+
+      setMarkers((prevMarkers) =>
+        prevMarkers ? [...prevMarkers, newMarker] : [newMarker]
+      );
     } else {
       setIsCorrect(false);
     }
@@ -69,30 +81,41 @@ export default function ExamplePage() {
   };
 
   return (
-    <div>
-      <h2>Guess the City</h2>
+    <div className="flex flex-col items-center">
+      <h2 className="text-xl">Guess the City</h2>
       {randomCity && (
-        <div>
+        <div className="mb-10">
           <p>Ville: {randomCity.nom_commune}</p>
           {randomCity.additionalData && (
             <div>
               <p>Code Postal: {randomCity.additionalData.zip_code}</p>
               <p>Type: {randomCity.type}</p>
-              <p>Nom departement: {randomCity.additionalData.department_name}</p>
-              <p>n° departement: {randomCity.additionalData.department_number}</p>
+              <p>
+                Nom departement: {randomCity.additionalData.department_name}
+              </p>
+              <p>
+                n° departement: {randomCity.additionalData.department_number}
+              </p>
               <p>Région: {randomCity.additionalData.region_geojson_name}</p>
             </div>
           )}
-          <input
-            type="text"
-            value={guess}
-            onChange={handleGuessChange}
-          />
+          <input type="text" value={guess} onChange={handleGuessChange} />
           <button onClick={handleGuess}>Check</button>
           {isCorrect !== null && (
-            <p>{isCorrect ? 'Yes, that\'s correct!' : 'No, try again.'}</p>
+            <p>{isCorrect ? "Yes, that's correct!" : "No, try again."}</p>
           )}
         </div>
+      )}
+
+      {randomCity && randomCity.additionalData && (
+        <MyMap
+          position={[
+            parseFloat(randomCity.additionalData.latitude),
+            parseFloat(randomCity.additionalData.longitude),
+          ]}
+          zoom={5}
+          markers={markers!}
+        />
       )}
     </div>
   );
