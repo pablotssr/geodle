@@ -7,32 +7,32 @@ import "react-toastify/dist/ReactToastify.css";
 import GameResultModal from "../Modal/GameResultModal";
 
 export default function GamePanel(randomCity: any) {
-	const [rows, setRows] = useState<Row[]>([]);
-	const [currentRowIndex, setCurrentRowIndex] = useState(0);
-	const [text, setText] = useState("");
-	const [solution, setSolution] = useState("");
-	const [gameState, setGameState] =
-		useState<keyof typeof GameStates>("playing");
+  const [rows, setRows] = useState<Row[]>([]);
+  const [currentRowIndex, setCurrentRowIndex] = useState(0);
+  const [text, setText] = useState("");
+  const [solution, setSolution] = useState("");
+  const [gameState, setGameState] =
+    useState<keyof typeof GameStates>("playing");
 
-	const word = randomCity.randomCity
-	const nbEssais = 5;
+  const word = randomCity.randomCity;
+  const nbEssais = 5;
 
   const handleLetterClick = (letter: string) => {
     if (text.length >= word.length) return;
     setText((prevText) => prevText + letter);
   };
 
-	const handleReset = () => {
-		const temp: Row[] = Array(nbEssais).fill(
-			Array(word.length).fill({ value: "", status: "guessing" })
-		);
-		setRows(temp);
-		setCurrentRowIndex(0);
-		setSolution(loadSolution());
-		setGameState("playing");
-		setText("");
-		console.log(word.length,word)
-	};
+  const handleReset = () => {
+    const temp: Row[] = Array(nbEssais).fill(
+      Array(word.length).fill({ value: "", status: "guessing" })
+    );
+    setRows(temp);
+    setCurrentRowIndex(0);
+    setSolution(loadSolution());
+    setGameState("playing");
+    setText("");
+    console.log(word.length, word);
+  };
 
   const loadSolution = () => {
     // Logic to fetch the city (solution)
@@ -64,7 +64,10 @@ export default function GamePanel(randomCity: any) {
       setGameState("win");
       return;
     }
-    if (currentRowIndex === nbEssais - 1 && text.toLowerCase() !== solution.toLowerCase()) {
+    if (
+      currentRowIndex === nbEssais - 1 &&
+      text.toLowerCase() !== solution.toLowerCase()
+    ) {
       setGameState("lose");
       return;
     }
@@ -77,7 +80,9 @@ export default function GamePanel(randomCity: any) {
     for (let i = 0; i < currentRow.length; i++) {
       if (solution.toLowerCase().includes(text[i].toLowerCase())) {
         currentRow[i].status =
-          solution[i].toLowerCase() === text[i].toLowerCase() ? "correct" : "present";
+          solution[i].toLowerCase() === text[i].toLowerCase()
+            ? "correct"
+            : "present";
       } else {
         currentRow[i].status = "absent";
       }

@@ -57,7 +57,26 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
-    if (jsonData && cityDataMap.size > 0 && type) {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key.length === 1 && event.key.match(/[a-zA-Z]/)) {
+        setGuess((prevValue) => prevValue + event.key);
+      } else if (event.key === "Backspace") {
+        setGuess((prevValue) => prevValue.slice(0, -1));
+      } else if (event.key === "Enter") {
+        handleGuess();
+      }
+      console.log(guess);
+    };
+
+    document.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [guess]);
+
+  useEffect(() => {
+    if (jsonData && cityDataMap.size > 0) {
       let filteredCities = jsonData;
       if (type === "Prefecture") {
         filteredCities = jsonData.filter((city) => city.type === "Préfecture" || city.type === "Préfecture de région");
@@ -86,6 +105,7 @@ useEffect(() => {
   }, [jsonData, cityDataMap, type]);
 
   const handleGuess = () => {
+    console.log(guess);
     //CHECK SI GUESS EST UN NOM DE VILLE VALIDE
     const isCityMatched =
       jsonData &&
@@ -178,6 +198,16 @@ useEffect(() => {
       setSelectedSuggestionIndex((prevIndex) =>
         prevIndex > 0 ? prevIndex - 1 : prevIndex
       );
+    } else if (event.key === "Enter") {
+      console.log("guess");
+      const input = inputRef.current;
+      if (input && input.value !== null) {
+        event.preventDefault();
+        setGuess(input.value);
+        handleGuess();
+        setShowSuggestions(false);
+        input.focus();
+      }
     } else if (event.key === "Enter" && selectedSuggestionIndex !== -1) {
       event.preventDefault();
       setGuess(suggestions[selectedSuggestionIndex]);
