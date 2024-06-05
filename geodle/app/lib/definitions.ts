@@ -6,8 +6,10 @@ export interface City {
   insee_commune: string;
   type: string;
   additionalData?: CityAdditionalData;
-  geo_point_2d: { lat: string; lon: string };
+  geo_point_2d: {lon: string,lat: string}
 }
+
+
 export interface CityAdditionalData {
   insee_code: string;
   city_code: string;

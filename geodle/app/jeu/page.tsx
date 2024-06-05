@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 import MyMap from "../components/map";
 import { CityAdditionalData, City, Markers } from "../lib/definitions";
 import { useRouter, useSearchParams } from "next/navigation";
-import "../globals.css";
 
 export default function GamePage() {
   const searchParams = useSearchParams();
@@ -106,6 +105,7 @@ export default function GamePage() {
       setIsCorrect(true);
     } else {
       setIsCorrect(false);
+      
     }
   };
 
@@ -115,6 +115,14 @@ export default function GamePage() {
     if (value.trim() !== "") {
       const filteredSuggestions = jsonData
         ? jsonData
+            .filter((city) => {
+              if (type === "Prefecture") {
+                return city.type === "Préfecture";
+              } else if (type === "SousPrefecture") {
+                return city.type === "Sous-préfecture";
+              }
+              return false;
+            })
             .map((city) => city.nom_commune.toLowerCase())
             .filter((city) => city.startsWith(value))
         : [];
@@ -126,6 +134,7 @@ export default function GamePage() {
       setShowSuggestions(false);
     }
   };
+  
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "ArrowDown") {
