@@ -3,11 +3,10 @@ import { useEffect, useMemo } from "react";
 import Key from "../Key";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
-import GameResultModal from "../Modal/GameResultModal";
 
 const firstRow = ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P"];
 const secondRow = ["Q", "S", "D", "F", "G", "H", "J", "K", "L", "M"];
-const thirdRow = ["W", "X", "C", "V", "B", "N"];
+const thirdRow = ["W", "X", "C", "V", "B", "N", "-"];
 
 type Props = {
 	onLetterClick: (letter: string) => void;
