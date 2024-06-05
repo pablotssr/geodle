@@ -1,18 +1,10 @@
-'use client';
-import dynamic from 'next/dynamic.js';
-import { useMemo
+"use client";
+import GamePanel from "./components/GamePanel";
 
- } from 'react';
-  export default function MyPage() {
-  const Map = useMemo(() => dynamic(
-    () => import('./components/map'),
-    { 
-      loading: () => <p>A map is loading</p>,
-      ssr: false
-    }
-  ), [])
-
-  return <div>
-    <Map  />
-  </div>
+export default function Page() {
+	return (
+		<div className="h-full flex flex-col items-center justify-center gap-2 m-16">
+			<GamePanel />
+		</div>
+	);
 }

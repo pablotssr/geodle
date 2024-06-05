@@ -1,13 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { City } from '../types';
 
-interface City {
-  zip_code: string;
-  city_code: string;
-  department_number: string;
-}
-
-export default function ExamplePage() {
+export default function Jeu() {
   const [jsonData, setJsonData] = useState<City[] | null>(null);
   const [randomCity, setRandomCity] = useState<City | null>(null);
   const [guess, setGuess] = useState<string>('');

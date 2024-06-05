@@ -5,7 +5,7 @@ import "leaflet-defaulticon-compatibility"
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css"
 import { LatLngTuple } from "leaflet";
 
-export default function MyMap(props: any) {
+export default function Map(props: any) {
     const position: LatLngTuple = [46.603354, 1.888334];
     const zoom = 6; // Adjust zoom level as needed
 
