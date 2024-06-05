@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 .leaflet-container{
-    height:400px;
-    width: 400px; 
+    @apply h-screen;
+    @apply w-screen;
 }

@@ -4,6 +4,7 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import { MapContainer, Marker, TileLayer, Popup } from "react-leaflet";
 import { MyMapProps, Markers as MarkersType } from "../../lib/definitions";
 
+
 export default function Map({position, zoom, markers}:MyMapProps) {
 	return (
 		<MapContainer center={position} zoom={zoom} scrollWheelZoom={true}>

@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
 import type { Metadata } from "next";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import Header from "./components/Layout/header";
 import Footer from "./components/Layout/footer";
+import { CityDataProvider } from './context/CityDataContext.js';
 
 export const metadata: Metadata = {
 	title: {
@@ -22,7 +22,9 @@ export default function RootLayout({
 		<html lang="en">
 			<body>
 				<Header/>
-				{children}
+				<CityDataProvider>
+					{children}
+				</CityDataProvider>
 				<ToastContainer
 					position="bottom-right"
 					autoClose={5000}
