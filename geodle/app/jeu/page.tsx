@@ -13,46 +13,45 @@ import {
 } from "../lib/markers";
 import dynamic from 'next/dynamic';
 
-const MyMap = dynamic(() => import("../components/Map/index"), { ssr: false });
-const GamePanel = dynamic(() => import("../components/GamePanel"), { ssr: false });
+
+const MyMap = dynamic(() => import('../components/Map/index'), { ssr: false });
+const GamePanel = dynamic(() => import('../components/GamePanel'), { ssr: false });
+
 export default function Jeu() {
   const searchParams = useSearchParams();
-  const type = searchParams.get("type");
+  const type = searchParams.get('type');
   const [markers, setMarkers] = useState<Markers[] | null>(null);
   const [jsonData, setJsonData] = useState<City[] | null>(null);
-  const [cityDataMap, setCityDataMap] = useState<
-    Map<string, CityAdditionalData>
-  >(new Map());
+  const [cityDataMap, setCityDataMap] = useState<Map<string, CityAdditionalData>>(new Map());
   const [randomCity, setRandomCity] = useState<City | null>(null);
-  const [guess, setGuess] = useState<string>("");
+  const [guess, setGuess] = useState<string>('');
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
-  const [selectedSuggestionIndex, setSelectedSuggestionIndex] =
-    useState<number>(-1);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState<number>(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("prefsSousPrefs.json");
+        const response = await fetch('prefsSousPrefs.json');
         const data = await response.json();
         setJsonData(data);
       } catch (error) {
-        console.error("Error fetching prefsSousPrefs.json:", error);
+        console.error('Error fetching prefsSousPrefs.json:', error);
       }
-      
+
       try {
-        const response = await fetch("cities.json");
+        const response = await fetch('cities.json');
         const data = await response.json();
         const cityMap: Map<string, CityAdditionalData> = new Map(
           data.cities.map((city: CityAdditionalData) => [city.insee_code, city])
         );
         setCityDataMap(cityMap);
       } catch (error) {
-        console.error("Error fetching cities.json:", error);
+        console.error('Error fetching cities.json:', error);
       }
     }
 
@@ -60,33 +59,33 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key.length === 1 && event.key.match(/[a-zA-Z]/)) {
-        setGuess((prevValue) => prevValue + event.key);
-      } else if (event.key === "Backspace") {
-        setGuess((prevValue) => prevValue.slice(0, -1));
-      } else if (event.key === "Enter") {
-        handleGuess();
-      }
-      console.log(guess);
-    };
+    if (typeof window !== 'undefined') {
+      const handleKeyPress = (event: KeyboardEvent) => {
+        if (event.key.length === 1 && event.key.match(/[a-zA-Z]/)) {
+          setGuess((prevValue) => prevValue + event.key);
+        } else if (event.key === 'Backspace') {
+          setGuess((prevValue) => prevValue.slice(0, -1));
+        } else if (event.key === 'Enter') {
+          handleGuess();
+        }
+        console.log(guess);
+      };
 
-    document.addEventListener("keydown", handleKeyPress);
+      document.addEventListener('keydown', handleKeyPress);
 
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress);
-    };
+      return () => {
+        document.removeEventListener('keydown', handleKeyPress);
+      };
+    }
   }, [guess]);
 
   useEffect(() => {
     if (jsonData && cityDataMap.size > 0) {
       let filteredCities = jsonData;
-      if (type === "Prefecture") {
-        filteredCities = jsonData.filter((city) => city.type === "Préfecture" || city.type === "Préfecture de région");
-      } else if (type === "SousPrefecture") {
-        filteredCities = jsonData.filter(
-          (city) => city.type === "Sous-préfecture"
-        );
+      if (type === 'Prefecture') {
+        filteredCities = jsonData.filter((city) => city.type === 'Préfecture' || city.type === 'Préfecture de région');
+      } else if (type === 'SousPrefecture') {
+        filteredCities = jsonData.filter((city) => city.type === 'Sous-préfecture');
       }
       const randomIndex = Math.floor(Math.random() * filteredCities.length);
       const randomCityData = filteredCities[randomIndex];
@@ -109,7 +108,6 @@ useEffect(() => {
 
   const handleGuess = () => {
     console.log(guess);
-    //CHECK SI GUESS EST UN NOM DE VILLE VALIDE
     const isCityMatched =
       jsonData &&
       jsonData.some(
@@ -133,11 +131,10 @@ useEffect(() => {
       );
       let icon = iconBlue;
 
-      // Définir des seuils pour changer les couleurs
       if (distance < 100) {
-        icon = iconRed; // Très proche
+        icon = iconRed;
       } else if (distance < 400) {
-        icon = iconYellow; // Moyennement proche
+        icon = iconYellow;
       } else {
         icon = iconBlue;
       }
@@ -153,7 +150,6 @@ useEffect(() => {
       );
     }
 
-    //RESULTAT
     if (
       randomCity &&
       guess.toLowerCase() === randomCity.nom_commune.toLowerCase()
@@ -167,14 +163,14 @@ useEffect(() => {
   const handleGuessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.toLowerCase();
     setGuess(value);
-    if (value.trim() !== "") {
+    if (value.trim() !== '') {
       const filteredSuggestions = jsonData
         ? jsonData
             .filter((city) => {
-              if (type === "Prefecture") {
-                return city.type === "Préfecture" || city.type === "Préfecture de région";
-              } else if (type === "SousPrefecture") {
-                return city.type === "Sous-préfecture";
+              if (type === 'Prefecture') {
+                return city.type === 'Préfecture' || city.type === 'Préfecture de région';
+              } else if (type === 'SousPrefecture') {
+                return city.type === 'Sous-préfecture';
               }
               return false;
             })
@@ -183,7 +179,7 @@ useEffect(() => {
         : [];
       setSuggestions(filteredSuggestions);
       setShowSuggestions(true);
-      setSelectedSuggestionIndex(-1); // Reset selected suggestion index when input value changes
+      setSelectedSuggestionIndex(-1);
     } else {
       setSuggestions([]);
       setShowSuggestions(false);
@@ -191,18 +187,17 @@ useEffect(() => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "ArrowDown") {
+    if (event.key === 'ArrowDown') {
       event.preventDefault();
       setSelectedSuggestionIndex((prevIndex) =>
         prevIndex < suggestions.length - 1 ? prevIndex + 1 : prevIndex
       );
-    } else if (event.key === "ArrowUp") {
+    } else if (event.key === 'ArrowUp') {
       event.preventDefault();
       setSelectedSuggestionIndex((prevIndex) =>
         prevIndex > 0 ? prevIndex - 1 : prevIndex
       );
-    } else if (event.key === "Enter") {
-      console.log("guess");
+    } else if (event.key === 'Enter') {
       const input = inputRef.current;
       if (input && input.value !== null) {
         event.preventDefault();
@@ -211,7 +206,7 @@ useEffect(() => {
         setShowSuggestions(false);
         input.focus();
       }
-    } else if (event.key === "Enter" && selectedSuggestionIndex !== -1) {
+    } else if (event.key === 'Enter' && selectedSuggestionIndex !== -1) {
       event.preventDefault();
       setGuess(suggestions[selectedSuggestionIndex]);
       setShowSuggestions(false);
@@ -224,7 +219,7 @@ useEffect(() => {
   const handleSuggestionClick = (suggestion: string, index: number) => {
     setGuess(suggestion);
     setShowSuggestions(false);
-    setSelectedSuggestionIndex(-1); // Reset selected suggestion index
+    setSelectedSuggestionIndex(-1);
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -239,7 +234,7 @@ useEffect(() => {
 
           <p>City: {randomCity.nom_commune}</p>
           <p>Code Insee: {randomCity.insee_commune}</p>
-          {randomCity.type === "Sous-préfecture" &&
+          {randomCity.type === 'Sous-préfecture' &&
             randomCity.additionalData && (
               <p>Department: {randomCity.additionalData.department_number}</p>
             )}
@@ -256,7 +251,7 @@ useEffect(() => {
             type="text"
             value={guess}
             onChange={handleGuessChange}
-            onKeyDown={handleKeyDown} // Add keydown event listener
+            onKeyDown={handleKeyDown}
           />
           <button onClick={handleGuess}>Check</button>
           {isCorrect !== null && (
@@ -268,7 +263,7 @@ useEffect(() => {
                 <div
                   key={index}
                   className={`suggestion ${
-                    selectedSuggestionIndex === index ? "selected" : ""
+                    selectedSuggestionIndex === index ? 'selected' : ''
                   }`}
                   onClick={() => handleSuggestionClick(suggestion, index)}>
                   {suggestion}
