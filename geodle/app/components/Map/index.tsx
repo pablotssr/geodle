@@ -26,7 +26,7 @@ const Map: React.FC<MyMapProps> = ({ position = defaultPosition, zoom = defaultZ
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {markers.map((marker, index) => (
-        <Marker key={index} position={marker.position}>
+        <Marker key={index} position={marker.position} icon={marker.icon}>
           <Popup>{`Attempt ${marker.nom_commune}`}</Popup>
         </Marker>
       ))}

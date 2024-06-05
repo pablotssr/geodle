@@ -23,6 +23,7 @@ export default function Jeu() {
   const [randomCity, setRandomCity] = useState<City | null>(null);
   const [guess, setGuess] = useState<string>("");
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] =
@@ -30,28 +31,33 @@ export default function Jeu() {
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+useEffect(() => {
     async function fetchData() {
-      const response = await fetch("/prefsSousPrefs.json");
-      const data = await response.json();
-      setJsonData(data);
-    }
-
-    async function fetchCities() {
-      const response = await fetch("/cities.json");
-      const data = await response.json();
-      const cityMap: Map<string, CityAdditionalData> = new Map(
-        data.cities.map((city: CityAdditionalData) => [city.insee_code, city])
-      );
-      setCityDataMap(cityMap);
+      try {
+        const response = await fetch("prefsSousPrefs.json");
+        const data = await response.json();
+        setJsonData(data);
+      } catch (error) {
+        console.error("Error fetching prefsSousPrefs.json:", error);
+      }
+      
+      try {
+        const response = await fetch("cities.json");
+        const data = await response.json();
+        const cityMap: Map<string, CityAdditionalData> = new Map(
+          data.cities.map((city: CityAdditionalData) => [city.insee_code, city])
+        );
+        setCityDataMap(cityMap);
+      } catch (error) {
+        console.error("Error fetching cities.json:", error);
+      }
     }
 
     fetchData();
-    fetchCities();
   }, []);
 
   useEffect(() => {
-    if (jsonData && cityDataMap.size > 0) {
+    if (jsonData && cityDataMap.size > 0 && type) {
       let filteredCities = jsonData;
       if (type === "Prefecture") {
         filteredCities = jsonData.filter((city) => city.type === "Préfecture" || city.type === "Préfecture de région");
