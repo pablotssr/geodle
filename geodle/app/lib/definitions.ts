@@ -1,14 +1,15 @@
 import { LatLngTuple } from "leaflet";
 
+export const DEBUG = true;
+
 export interface City {
   gid: string;
   nom_commune: string;
   insee_commune: string;
   type: string;
   additionalData?: CityAdditionalData;
-  geo_point_2d: {lon: string,lat: string}
+  geo_point_2d: {lon: string, lat: string};
 }
-
 
 export interface CityAdditionalData {
   insee_code: string;
@@ -33,3 +34,24 @@ export interface Markers {
   position: LatLngTuple;
   nom_commune: string;
 }
+
+export enum GameStates {
+	"playing",
+	"win",
+	"lose",
+}
+export enum Statuses {
+	"absent",
+	"present",
+	"correct",
+	"guessing",
+}
+
+export type CharStatus = keyof typeof Statuses;
+
+interface Cell {
+	value: string;
+	status: CharStatus;
+}
+
+export type Row = Cell[];

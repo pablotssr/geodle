@@ -1,4 +1,4 @@
-import { Row } from "@/app/types";
+import { Row } from "@/app/lib/definitions";
 import { useEffect, useMemo } from "react";
 import Key from "../Key";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -95,7 +95,7 @@ export default function Keyboard({
 					onClick={onDelete}
 				>
 					<div className="flex items-center justify-center">
-					<FontAwesomeIcon icon={faDeleteLeft} />
+						<FontAwesomeIcon icon={faDeleteLeft} />
 					</div>
 				</button>
 				<button
@@ -104,9 +104,6 @@ export default function Keyboard({
 				>
 					<div className="flex items-center justify-center">Reset</div>
 				</button>
-				{/* <GameResultModal gameState={"win"} resetGame={function (): void {
-					throw new Error("Function not implemented.");
-				} }/> */}
 			</div>
 		</div>
 	);
