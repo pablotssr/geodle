@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-import MyMap from "../components/Map/index";
+// import MyMap from "../components/Map/index";
 import { CityAdditionalData, City, Markers } from "../lib/definitions";
 import { useRouter, useSearchParams } from "next/navigation";
-import GamePanel from "../components/GamePanel";
+// import GamePanel from "../components/GamePanel";
 import {
   greenIcon,
   iconRed,
@@ -11,7 +11,10 @@ import {
   iconYellow,
   haversineDistance,
 } from "../lib/markers";
+import dynamic from 'next/dynamic';
 
+const MyMap = dynamic(() => import("../components/Map/index"), { ssr: false });
+const GamePanel = dynamic(() => import("../components/GamePanel"), { ssr: false });
 export default function Jeu() {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
