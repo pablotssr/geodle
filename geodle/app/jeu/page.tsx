@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-
+import MyMap from "../components/Map/map";
 import { CityAdditionalData, City, Markers } from "../lib/definitions";
 import { useRouter, useSearchParams } from "next/navigation";
-import MyMap from "../components/Map/map";
+import GamePanel from "../components/GamePanel";
 import L from "leaflet";
 
 export default function Jeu() {
@@ -246,6 +246,8 @@ export default function Jeu() {
       <h2 className="text-xl">Guess the City</h2>
       {randomCity && (
         <div>
+          <GamePanel randomCity={randomCity.nom_commune} />
+
           <p>City: {randomCity.nom_commune}</p>
           <p>Code Insee: {randomCity.insee_commune}</p>
           {randomCity.type === "Sous-préfecture" &&
