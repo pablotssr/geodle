@@ -52,14 +52,22 @@ export default function Jeu() {
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key.length === 1 && event.key.match(/[a-zA-Z]/)) {
-        setGuess((prevValue) => prevValue + event.key);
-      } else if (event.key === "Backspace") {
-        setGuess((prevValue) => prevValue.slice(0, -1));
-      } else if (event.key === "Enter") {
+      console.log("test");
+      console.log();
+      if (inputRef.current!.value.length <= randomCity!.nom_commune.length) {
+        console.log("testeé&");
+        if (event.key.length === 1 && event.key.match(/[a-zA-Z]/)) {
+          setGuess((prevValue) => prevValue + event.key);
+        } else if (event.key === "Backspace") {
+          setGuess((prevValue) => prevValue.slice(0, -1));
+        } else if (event.key === "Enter") {
+          if (inputRef.current) {
+            inputRef.current.value = "";
+          }
+        }
         handleGuess();
+        console.log(guess);
       }
-      console.log(guess);
     };
 
     document.addEventListener("keydown", handleKeyPress);
@@ -73,7 +81,10 @@ export default function Jeu() {
     if (jsonData && cityDataMap.size > 0) {
       let filteredCities = jsonData;
       if (type === "Prefecture") {
-        filteredCities = jsonData.filter((city) => city.type === "Préfecture" || city.type === "Préfecture de région");
+        filteredCities = jsonData.filter(
+          (city) =>
+            city.type === "Préfecture" || city.type === "Préfecture de région"
+        );
       } else if (type === "SousPrefecture") {
         filteredCities = jsonData.filter(
           (city) => city.type === "Sous-préfecture"
@@ -116,8 +127,6 @@ export default function Jeu() {
         parseFloat(matchedCity!.geo_point_2d.lon),
       ];
 
-      console.log(randomCity?.geo_point_2d);
-      console.log(matchedCityPosition);
       const distance = haversineDistance(
         randomCity!.geo_point_2d,
         matchedCityPosition
@@ -163,7 +172,10 @@ export default function Jeu() {
         ? jsonData
             .filter((city) => {
               if (type === "Prefecture") {
-                return city.type === "Préfecture" || city.type === "Préfecture de région";
+                return (
+                  city.type === "Préfecture" ||
+                  city.type === "Préfecture de région"
+                );
               } else if (type === "SousPrefecture") {
                 return city.type === "Sous-préfecture";
               }
