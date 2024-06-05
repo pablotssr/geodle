@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-import MyMap from "../components/Map/map";
+import MyMap from "../components/Map/index";
 import { CityAdditionalData, City, Markers } from "../lib/definitions";
 import { useRouter, useSearchParams } from "next/navigation";
 import GamePanel from "../components/GamePanel";
@@ -73,7 +73,7 @@ export default function Jeu() {
     if (jsonData && cityDataMap.size > 0) {
       let filteredCities = jsonData;
       if (type === "Prefecture") {
-        filteredCities = jsonData.filter((city) => city.type === "Préfecture");
+        filteredCities = jsonData.filter((city) => city.type === "Préfecture" || city.type === "Préfecture de région");
       } else if (type === "SousPrefecture") {
         filteredCities = jsonData.filter(
           (city) => city.type === "Sous-préfecture"
@@ -163,7 +163,7 @@ export default function Jeu() {
         ? jsonData
             .filter((city) => {
               if (type === "Prefecture") {
-                return city.type === "Préfecture";
+                return city.type === "Préfecture" || city.type === "Préfecture de région";
               } else if (type === "SousPrefecture") {
                 return city.type === "Sous-préfecture";
               }

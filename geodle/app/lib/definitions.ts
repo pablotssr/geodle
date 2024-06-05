@@ -66,3 +66,17 @@ export interface City {
   city_code: string;
   department_number: string;
 }
+
+
+interface Cell {
+	value: string;
+	status: CharStatus;
+}
+
+
+
+export interface City {
+	zip_code: string;
+	city_code: string;
+	department_number: string;
+}

@@ -1,4 +1,4 @@
-import { GameStates } from "@/app/types";
+import { GameStates } from "@/app/lib/definitions";
 import { useState, useEffect } from "react";
 
 export default function GameResultModal({

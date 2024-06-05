@@ -1,4 +1,4 @@
-import { GameStates, Row } from "@/app/types";
+import { GameStates, Row } from "@/app/lib/definitions";
 import { useEffect, useState } from "react";
 import Key from "../Key";
 import Keyboard from "../Keyboard";
@@ -14,7 +14,7 @@ export default function GamePanel(randomCity: any) {
   const [gameState, setGameState] =
     useState<keyof typeof GameStates>("playing");
 
-  const word = randomCity.randomCity.toLowerCase();
+  const word = randomCity.randomCity;
   const nbEssais = 5;
 
   const handleLetterClick = (letter: string) => {
@@ -60,11 +60,14 @@ export default function GamePanel(randomCity: any) {
     // }
 
     getStatuses();
-    if (text === solution.toUpperCase()) {
+    if (text.toLowerCase() === solution.toLowerCase()) {
       setGameState("win");
       return;
     }
-    if (currentRowIndex === 5 && text !== solution.toUpperCase()) {
+    if (
+      currentRowIndex === nbEssais - 1 &&
+      text.toLowerCase() !== solution.toLowerCase()
+    ) {
       setGameState("lose");
       return;
     }
@@ -77,7 +80,9 @@ export default function GamePanel(randomCity: any) {
     for (let i = 0; i < currentRow.length; i++) {
       if (solution.toLowerCase().includes(text[i].toLowerCase())) {
         currentRow[i].status =
-          solution[i] === text[i].toLowerCase() ? "correct" : "present";
+          solution[i].toLowerCase() === text[i].toLowerCase()
+            ? "correct"
+            : "present";
       } else {
         currentRow[i].status = "absent";
       }
