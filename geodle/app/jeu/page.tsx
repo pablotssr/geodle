@@ -4,6 +4,13 @@ import MyMap from "../components/Map/index";
 import { CityAdditionalData, City, Markers } from "../lib/definitions";
 import { useRouter, useSearchParams } from "next/navigation";
 import GamePanel from "../components/GamePanel";
+import {
+  greenIcon,
+  iconRed,
+  iconBlue,
+  iconYellow,
+  haversineDistance,
+} from "../lib/markers";
 
 export default function Jeu() {
   const searchParams = useSearchParams();
@@ -64,6 +71,7 @@ export default function Jeu() {
             parseFloat(additionalData.longitude),
           ],
           nom_commune: randomCityData.nom_commune,
+          icon: greenIcon,
         };
 
         setMarkers([newMarker]);
@@ -88,9 +96,27 @@ export default function Jeu() {
         parseFloat(matchedCity!.geo_point_2d.lon),
       ];
 
+      console.log(randomCity?.geo_point_2d);
+      console.log(matchedCityPosition);
+      const distance = haversineDistance(
+        randomCity!.geo_point_2d,
+        matchedCityPosition
+      );
+      let icon = iconBlue;
+
+      // Définir des seuils pour changer les couleurs
+      if (distance < 100) {
+        icon = iconRed; // Très proche
+      } else if (distance < 400) {
+        icon = iconYellow; // Moyennement proche
+      } else {
+        icon = iconBlue;
+      }
+
       const newMarker: Markers = {
         position: matchedCityPosition,
         nom_commune: matchedCity!.nom_commune,
+        icon: icon,
       };
 
       setMarkers((prevMarkers) =>
@@ -106,7 +132,6 @@ export default function Jeu() {
       setIsCorrect(true);
     } else {
       setIsCorrect(false);
-      
     }
   };
 
@@ -135,7 +160,6 @@ export default function Jeu() {
       setShowSuggestions(false);
     }
   };
-  
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "ArrowDown") {
@@ -172,7 +196,7 @@ export default function Jeu() {
       <h2 className="text-xl">Guess the City</h2>
       {randomCity && (
         <div>
-          			<GamePanel randomCity={randomCity.nom_commune} />
+          <GamePanel randomCity={randomCity.nom_commune} />
 
           <p>City: {randomCity.nom_commune}</p>
           <p>Code Insee: {randomCity.insee_commune}</p>
