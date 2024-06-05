@@ -8,6 +8,9 @@ export default function GamePage() {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
   const [markers, setMarkers] = useState<Markers[] | null>(null);
+import { City } from '../types';
+
+export default function Jeu() {
   const [jsonData, setJsonData] = useState<City[] | null>(null);
   const [cityDataMap, setCityDataMap] = useState<
     Map<string, CityAdditionalData>

@@ -1,9 +1,10 @@
+"use client";
+import GamePanel from "./components/GamePanel";
 
-export default function HomePage() {
-  return (
-    <div>
-      <h1>Welcome to the City Guessing Game</h1>
-      <a href="/menu">Go to Menu</a>
-    </div>
-  );
+export default function Page() {
+	return (
+		<div className="h-full flex flex-col items-center justify-center gap-2 m-16">
+			<GamePanel />
+		</div>
+	);
 }
