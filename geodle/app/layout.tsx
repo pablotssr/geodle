@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 		template: "%s | Geodle",
 		default: "Geodle",
 	},
-	description: "Geodle | The wordle with cities name.",
+	description: "Geodle | The City Wordle.",
 };
 
 export default function RootLayout({

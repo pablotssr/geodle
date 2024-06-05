@@ -5,7 +5,7 @@ import { useMemo } from "react";
 export default function Map() {
 	const Map = useMemo(
 		() =>
-			dynamic(() => import("../components/Map/map"), {
+			dynamic(() => import("../components/Map"), {
 				loading: () => (
 					<div className="flex justify-center items-center h-screen w-screen">
 						<span className="loading loading-spinner loading-lg"></span>
