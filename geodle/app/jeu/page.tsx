@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-import MyMap from "../components/Map/index";
+// import MyMap from "../components/Map/index";
 import { CityAdditionalData, City, Markers } from "../lib/definitions";
 import { useRouter, useSearchParams } from "next/navigation";
-import GamePanel from "../components/GamePanel";
+// import GamePanel from "../components/GamePanel";
 import {
   greenIcon,
   iconRed,
@@ -11,7 +11,10 @@ import {
   iconYellow,
   haversineDistance,
 } from "../lib/markers";
+import dynamic from 'next/dynamic';
 
+const MyMap = dynamic(() => import("../components/Map/index"), { ssr: false });
+const GamePanel = dynamic(() => import("../components/GamePanel"), { ssr: false });
 export default function Jeu() {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
@@ -23,6 +26,7 @@ export default function Jeu() {
   const [randomCity, setRandomCity] = useState<City | null>(null);
   const [guess, setGuess] = useState<string>("");
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] =
@@ -30,24 +34,29 @@ export default function Jeu() {
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+useEffect(() => {
     async function fetchData() {
-      const response = await fetch("/prefsSousPrefs.json");
-      const data = await response.json();
-      setJsonData(data);
-    }
-
-    async function fetchCities() {
-      const response = await fetch("/cities.json");
-      const data = await response.json();
-      const cityMap: Map<string, CityAdditionalData> = new Map(
-        data.cities.map((city: CityAdditionalData) => [city.insee_code, city])
-      );
-      setCityDataMap(cityMap);
+      try {
+        const response = await fetch("prefsSousPrefs.json");
+        const data = await response.json();
+        setJsonData(data);
+      } catch (error) {
+        console.error("Error fetching prefsSousPrefs.json:", error);
+      }
+      
+      try {
+        const response = await fetch("cities.json");
+        const data = await response.json();
+        const cityMap: Map<string, CityAdditionalData> = new Map(
+          data.cities.map((city: CityAdditionalData) => [city.insee_code, city])
+        );
+        setCityDataMap(cityMap);
+      } catch (error) {
+        console.error("Error fetching cities.json:", error);
+      }
     }
 
     fetchData();
-    fetchCities();
   }, []);
 
   useEffect(() => {
