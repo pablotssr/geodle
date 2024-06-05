@@ -65,6 +65,7 @@ export default function Jeu() {
             parseFloat(additionalData.longitude),
           ],
           nom_commune: randomCityData.nom_commune,
+          icon: greenIcon,
         };
 
         setMarkers([newMarker]);
@@ -76,10 +77,10 @@ export default function Jeu() {
   const haversineDistance = (coords1: any, coords2: any) => {
     const toRad = (x: any) => (x * Math.PI) / 180;
     const R = 6371; // Rayon de la Terre en km
-    const dLat = toRad(coords2[0] - coords1[0]);
-    const dLon = toRad(coords2[1] - coords1[1]);
-    const lat1 = toRad(coords1[0]);
-    const lat2 = toRad(coords2[0]);
+    const dLat = toRad(coords2.lat - coords1.lat);
+    const dLon = toRad(coords2.lon - coords1.lon);
+    const lat1 = toRad(coords1.lat);
+    const lat2 = toRad(coords2.lat);
 
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -151,7 +152,7 @@ export default function Jeu() {
       ];
 
       const distance = haversineDistance(
-        randomCity!.position,
+        randomCity!.geo_point_2d,
         matchedCityPosition
       );
       let icon = greenIcon; // Default to green icon
