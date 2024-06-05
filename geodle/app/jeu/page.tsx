@@ -4,7 +4,13 @@ import MyMap from "../components/Map/map";
 import { CityAdditionalData, City, Markers } from "../lib/definitions";
 import { useRouter, useSearchParams } from "next/navigation";
 import GamePanel from "../components/GamePanel";
-import L from "leaflet";
+import {
+  greenIcon,
+  iconRed,
+  iconBlue,
+  iconYellow,
+  haversineDistance,
+} from "../lib/markers";
 
 export default function Jeu() {
   const searchParams = useSearchParams();
@@ -73,67 +79,6 @@ export default function Jeu() {
     }
   }, [jsonData, cityDataMap, type]);
 
-  ///HANDLE ICON COLOR
-  const haversineDistance = (coords1: any, coords2: any) => {
-    const toRad = (x: any) => (x * Math.PI) / 180;
-    const R = 6371; // Rayon de la Terre en km
-    const dLat = toRad(coords2.lat - coords1.lat);
-    const dLon = toRad(coords2.lon - coords1.lon);
-    const lat1 = toRad(coords1.lat);
-    const lat2 = toRad(coords2.lat);
-
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return R * c;
-  };
-
-  const iconBlue = new L.Icon({
-    iconUrl:
-      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
-
-  const iconYellow = new L.Icon({
-    iconUrl:
-      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
-
-  const iconOrange = new L.Icon({
-    iconUrl:
-      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
-  const iconRed = new L.Icon({
-    iconUrl:
-      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
-
-  const greenIcon = new L.Icon({
-    iconUrl:
-      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
-
   const handleGuess = () => {
     //CHECK SI GUESS EST UN NOM DE VILLE VALIDE
     const isCityMatched =
@@ -151,17 +96,21 @@ export default function Jeu() {
         parseFloat(matchedCity!.geo_point_2d.lon),
       ];
 
+      console.log(randomCity?.geo_point_2d);
+      console.log(matchedCityPosition);
       const distance = haversineDistance(
         randomCity!.geo_point_2d,
         matchedCityPosition
       );
-      let icon = greenIcon; // Default to green icon
+      let icon = iconBlue;
 
       // Définir des seuils pour changer les couleurs
-      if (distance < 50) {
+      if (distance < 100) {
         icon = iconRed; // Très proche
-      } else if (distance < 200) {
-        icon = iconBlue; // Moyennement proche
+      } else if (distance < 400) {
+        icon = iconYellow; // Moyennement proche
+      } else {
+        icon = iconBlue;
       }
 
       const newMarker: Markers = {
