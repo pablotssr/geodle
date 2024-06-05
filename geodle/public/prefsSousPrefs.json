@@ -1782,7 +1782,7 @@
 		"type": "Sous-pr\u00e9fecture",
 		"gid": "197",
 		"insee_commune": "58062",
-		"nom_commune": "Ch\u00e2teau-Chinon (ville)"
+		"nom_commune": "Ch\u00e2teau-Chinon"
 	},
 	{
 		"geo_point_2d": { "lon": 7.071828952295788, "lat": 49.111839925217275 },

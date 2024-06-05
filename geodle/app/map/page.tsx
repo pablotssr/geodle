@@ -18,7 +18,7 @@ export default function Map() {
 
 	return (
 		<div>
-			<Map />
+			<Map position={[46.603354, 1.888334]} zoom={6} markers={[]} />
 		</div>
 	);
 }

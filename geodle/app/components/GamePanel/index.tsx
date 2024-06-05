@@ -5,8 +5,9 @@ import Keyboard from "../Keyboard";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GameResultModal from "../Modal/GameResultModal";
+import { City } from "@/app/lib/definitions";
 
-export default function GamePanel() {
+export default function GamePanel(randomCity: any) {
 	const [rows, setRows] = useState<Row[]>([]);
 	const [currentRowIndex, setCurrentRowIndex] = useState(0);
 	const [text, setText] = useState("");
@@ -14,7 +15,7 @@ export default function GamePanel() {
 	const [gameState, setGameState] =
 		useState<keyof typeof GameStates>("playing");
 
-	const word = "cannes";
+	const word = randomCity.randomCity.toLowerCase();
 	const nbEssais = 5;
 
 	const handleLetterClick = (letter: string) => {
@@ -31,6 +32,7 @@ export default function GamePanel() {
 		setSolution(loadSolution());
 		setGameState("playing");
 		setText("");
+		console.log(word.length,word)
 	};
 
 	const loadSolution = () => {
