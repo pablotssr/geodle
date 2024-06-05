@@ -5,7 +5,6 @@ import Keyboard from "../Keyboard";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GameResultModal from "../Modal/GameResultModal";
-import { City } from "@/app/lib/definitions";
 
 export default function GamePanel(randomCity: any) {
 	const [rows, setRows] = useState<Row[]>([]);
