@@ -55,7 +55,7 @@ export default function Jeu() {
 			}
 			const randomIndex = Math.floor(Math.random() * filteredCities.length);
 			const randomCityData = filteredCities[randomIndex];
-			console.log("randomCityData: ", randomCityData.nom_commune)
+			console.log("randomCityData: ", randomCityData.nom_commune);
 			const additionalData = cityDataMap.get(randomCityData.insee_commune);
 			setRandomCity({ ...randomCityData, additionalData });
 			if (randomCityData && additionalData) {
@@ -168,33 +168,66 @@ export default function Jeu() {
 
 	return (
 		<div className="flex flex-col items-center">
-			<h2 className="text-2xl font-bold mb-4 dark:text-slate">Guess the City</h2>
+			<h2 className="text-2xl font-bold mb-4 dark:text-slate">
+				Guess the City
+			</h2>
 			{randomCity && (
 				<div>
 					<GamePanel randomCity={randomCity} />
-          {DEBUG && randomCity.additionalData && (
-            <div>
-              <p>City Code: {randomCity.additionalData.city_code}</p>
-              <p>Zip Code: {randomCity.additionalData.zip_code}</p>
-              <p>Department: {randomCity.additionalData.department_name}</p>
-              <p>Region: {randomCity.additionalData.region_name}</p>
-            </div>
-          )}
-					{DEBUG &&
-						randomCity.type === "Sous-préfecture" &&
-						randomCity.additionalData && (
-							<>
-								<p>Code Insee: {randomCity.insee_commune}</p>
-							</>
-						)}
-					<input
-						ref={inputRef}
-						type="text"
-						value={guess}
-						onChange={handleGuessChange}
-						onKeyDown={handleKeyDown}
-					/>
-					<button onClick={handleGuess}>Check</button>
+					{DEBUG && randomCity.additionalData && (
+						<div className="m-4 p-4 bg-base-200 shadow-md rounded-md">
+							<p className="text-lg font-semibold">City Information</p>
+							<div className="mt-2">
+								<p className="text-gray-500">
+									City Code: {randomCity.additionalData.city_code}
+								</p>
+								<p className="text-gray-500">
+									Zip Code: {randomCity.additionalData.zip_code}
+								</p>
+								<p className="text-gray-500">
+									Department: {randomCity.additionalData.department_name}
+								</p>
+								<p className="text-gray-500">
+									Region: {randomCity.additionalData.region_name}
+								</p>
+								<p className="text-gray-500">
+									Code Insee: {randomCity.insee_commune}
+								</p>
+							</div>
+						</div>
+					)}
+
+					<div className="flex items-center mt-4">
+						<label className="input input-bordered flex items-center gap-2">
+							<input
+								ref={inputRef}
+								type="text"
+								value={guess}
+								onChange={handleGuessChange}
+								onKeyDown={handleKeyDown}
+								className="grow"
+								placeholder="Search"
+							/>
+							<button
+								onClick={handleGuess}
+								className="btn btn-square btn-outline"
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 16 16"
+									fill="currentColor"
+									className="w-4 h-4 opacity-70"
+								>
+									<path
+										fillRule="evenodd"
+										d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+										clipRule="evenodd"
+									/>
+								</svg>
+							</button>
+						</label>
+					</div>
+
 					{isCorrect !== null && (
 						<p>{isCorrect ? "Yes, that's correct!" : "No, try again."}</p>
 					)}
