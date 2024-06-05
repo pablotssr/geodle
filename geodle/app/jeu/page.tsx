@@ -123,8 +123,6 @@ export default function Jeu() {
         parseFloat(matchedCity!.geo_point_2d.lon),
       ];
 
-      console.log(randomCity?.geo_point_2d);
-      console.log(matchedCityPosition);
       const distance = haversineDistance(
         randomCity!.geo_point_2d,
         matchedCityPosition
