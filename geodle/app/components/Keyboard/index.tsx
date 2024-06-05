@@ -1,4 +1,4 @@
-import { Row } from "@/app/types";
+import { Row } from "@/app/lib/definitions";
 import { useEffect, useMemo } from "react";
 import Key from "../Key";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

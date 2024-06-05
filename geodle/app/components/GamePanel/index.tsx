@@ -1,4 +1,4 @@
-import { GameStates, Row } from "@/app/types";
+import { GameStates, Row } from "@/app/lib/definitions";
 import { useEffect, useState } from "react";
 import Key from "../Key";
 import Keyboard from "../Keyboard";

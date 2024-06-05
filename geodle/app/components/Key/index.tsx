@@ -1,4 +1,4 @@
-import { CharStatus } from "@/app/types";
+import { CharStatus } from "@/app/lib/definitions";
 
 type Props = {
 	value: string;

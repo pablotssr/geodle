@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { City } from '../types';
+import { City } from "@/app/lib/definitions";
 
 export default function Jeu() {
   const [jsonData, setJsonData] = useState<City[] | null>(null);

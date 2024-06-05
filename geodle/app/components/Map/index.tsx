@@ -10,7 +10,7 @@ export default function Map(props: any) {
     const zoom = 6; // Adjust zoom level as needed
 
   return (
-    <MapContainer center={position} zoom={zoom} scrollWheelZoom={true} >
+    <MapContainer className="h-screen" center={position} zoom={zoom} scrollWheelZoom={true} >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
