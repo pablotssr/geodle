@@ -10,3 +10,12 @@
 .leaflet-control-attribution{
     display: none;
 }
+
+.suggestion{
+    @apply cursor-pointer;
+    @apply uppercase;
+}
+
+.suggestion:hover{
+    @apply bg-base-300;
+}
