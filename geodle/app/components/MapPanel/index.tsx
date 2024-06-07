@@ -1,10 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import {
-	Markers,
-	GameStates,
-} from "../../lib/definitions";
+import { Markers, GameStates } from "../../lib/definitions";
 import { useSearchParams } from "next/navigation";
 import {
 	greenIcon,
@@ -18,6 +15,8 @@ import dynamic from "next/dynamic";
 import Loader from "../Layout/loader";
 import { useCityData } from "../../context/CityDataContext";
 import useDebounce from "../../hooks/useDebounce";
+import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons/faArrowsRotate";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const MyMap = dynamic(() => import("../Map/"), {
 	loading: () => <Loader />,
@@ -25,12 +24,12 @@ const MyMap = dynamic(() => import("../Map/"), {
 });
 
 export default function MapPanel() {
-  const { randomCity, jsonData, generateRandomCity } = useCityData()
-  const searchParams = useSearchParams();
+	const { randomCity, jsonData, generateRandomCity } = useCityData();
+	const searchParams = useSearchParams();
 	const type = searchParams.get("type");
 	const [nbTries, setNbTries] = useState<number>(0);
 	const [indice, setIndice] = useState<string | null>(null);
-  const [markers, setMarkers] = useState<Markers[]>([]);
+	const [markers, setMarkers] = useState<Markers[]>([]);
 	const [guess, setGuess] = useState<string>("");
 	const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 	const [gameState, setGameState] =
@@ -138,7 +137,8 @@ export default function MapPanel() {
 	useEffect(() => {
 		if (debouncedGuess.trim() !== "") {
 			const filteredSuggestions = jsonData
-				? jsonData.map((city) => city.nom_commune.toLowerCase())
+				? jsonData
+						.map((city) => city.nom_commune.toLowerCase())
 						.filter((city) => city.startsWith(debouncedGuess))
 				: [];
 			setSuggestions(filteredSuggestions);
@@ -159,28 +159,28 @@ export default function MapPanel() {
 		}
 	};
 
-  const handleReset = () => {
-    setGameState("playing");
-    generateRandomCity();
-    setGuess("");
-  }
+	const handleReset = () => {
+		setGameState("playing");
+		generateRandomCity();
+		setGuess("");
+	};
 
-  return (
-    <div className="flex flex-col items-center">
-      <h2 className="text-xl">Guess the City</h2>
-      {randomCity && randomCity.additionalData && (
-        <MyMap
-          position={[
-            parseFloat(randomCity.additionalData.latitude),
-            parseFloat(randomCity.additionalData.longitude),
-          ]}
-          zoom={5}
-          markers={markers}
-        />
-      )}
-      {randomCity && randomCity.additionalData && (
-        <div>
-          <div className="py-5">Nombre d'essais : {nbTries}</div>
+	return (
+		<div className="flex flex-col items-center">
+			<h2 className="text-xl">Guess the City</h2>
+			{randomCity && randomCity.additionalData && (
+				<MyMap
+					position={[
+						parseFloat(randomCity.additionalData.latitude),
+						parseFloat(randomCity.additionalData.longitude),
+					]}
+					zoom={5}
+					markers={markers}
+				/>
+			)}
+			{randomCity && randomCity.additionalData && (
+				<div>
+					<div className="my-2">Nombre d'essais : {nbTries}</div>
 					<div className="flex items-center gap-2">
 						<button
 							className="btn btn-neutral"
@@ -221,22 +221,37 @@ export default function MapPanel() {
 			)}
 
 			{randomCity && (
-				<div>
-					<div className="join mt-9">
-						<input
-							className="input input-bordered join-item"
-							ref={inputRef}
-							type="text"
-							value={guess}
-							onChange={handleGuessChange}
-							onKeyDown={handleKeyDown}
-						/>
-						<button className="btn btn-primary join-item" onClick={handleGuess}>
-							Check
-						</button>
+				<div className="flex flex-col">
+					<div className="flex flex-row mt-4 gap-2">
+						<div className="join">
+							<input
+								className="input input-bordered join-item"
+								ref={inputRef}
+								type="text"
+								value={guess}
+								onChange={handleGuessChange}
+								onKeyDown={handleKeyDown}
+							/>
+							<button
+								className="btn btn-primary join-item"
+								onClick={handleGuess}
+							>
+								Guess
+							</button>
+						</div>
+
+						<div className="tooltip" data-tip="Pick a new city">
+							<button
+								className="border-2	 hidden lg:inline-flex items-center justify-center w-12 h-12 bg-orange-500 border-orange-500 text-white rounded"
+								onClick={generateRandomCity}
+							>
+								<FontAwesomeIcon icon={faArrowsRotate} />
+							</button>
+						</div>
 					</div>
 
 					{isCorrect && <div></div>}
+
 					{showSuggestions && (
 						<div
 							className="suggestions-container bg-base-200 border-base-200 border-2 rounded-lg"
@@ -257,7 +272,13 @@ export default function MapPanel() {
 					)}
 				</div>
 			)}
-			<GameResultModal gameState={gameState} resetGame={handleReset} />
+
+			<GameResultModal
+				gameState={gameState}
+				resetGame={() => {
+					handleReset;
+				}}
+			/>
 		</div>
 	);
 }

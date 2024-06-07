@@ -109,7 +109,7 @@ export default function Keyboard({
 					status={checkStatus(" ")}
 					type="spacebar"
 				/>
-				<div className="tooltip" data-tip="Delete last letter">
+				<div className="tooltip" data-tip="Delete last input letter">
 					<button
 						className="border-2hidden lg:inline-flex items-center justify-center w-12 h-12 bg-red-500 border-red-500 text-white rounded"
 						onClick={onDelete}
@@ -121,7 +121,7 @@ export default function Keyboard({
 				</div>
 				<div className="tooltip" data-tip="Submit your word">
 					<button
-						className="border-2 hidden lg:inline-flex items-center justify-center w-12 h-12 bg-green-500 border-green-500 text-white rounded" // La barre d'espace est plus large
+						className="border-2 hidden lg:inline-flex items-center justify-center w-12 h-12 bg-green-500 border-green-500 text-white rounded"
 						onClick={onSubmit}
 					>
 						<FontAwesomeIcon icon={faPaperPlane} />
