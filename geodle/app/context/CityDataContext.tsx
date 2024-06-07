@@ -33,7 +33,7 @@ export const CityDataProvider = ({ children }: CityDataProviderProps): JSX.Eleme
         }
         const citiesData = await citiesResponse.json();
         const cityMap = new Map<string, City>(
-          citiesData.cities.map((city: City) => [city.insee_commune, city])
+          citiesData.cities.map((city: City) => [removeAccents(city.insee_commune), { ...city, nom_commune: removeAccents(city.nom_commune) }])
         );
         setCityDataMap(cityMap);
       } catch (error) {
@@ -57,6 +57,15 @@ export const CityDataProvider = ({ children }: CityDataProviderProps): JSX.Eleme
       const additionalData = cityDataMap.get(randomCityData.insee_commune);
       setRandomCity({ ...randomCityData, additionalData });
     }
+  };
+
+  const removeAccents = (str: string): string => {
+    if (!str) return "";
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/ç/g, "c")
+      .replace(/Ç/g, "C");
   };
 
   const contextValue: CityDataContextType = {

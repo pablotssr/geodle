@@ -8,9 +8,9 @@ import { CityDataProvider } from './context/CityDataContext';
 export const metadata: Metadata = {
 	title: {
 		template: "%s | Geodle",
-		default: "Geodle",
+		default: "Geodle | City Game",
 	},
-	description: "Geodle | The wordle with cities name.",
+	description: "Geodle | The City Game.",
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en">
+		<html lang="en" >
 			<body>
 				<Header/>
 				<CityDataProvider>

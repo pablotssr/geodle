@@ -12,13 +12,13 @@ export default function Jeu() {
     <div className="flex flex-col items-center">
       {randomCity ? (
         <div>
-          <h2 className="text-2xl font-bold mb-4 dark:text-slate">
+          <h2 className="text-3xl text-center font-bold mb-4 dark:text-slate">
             Guess the City
           </h2>
-          <h4 className="text-2xl font-bold dark:text-white">
+          <GamePanel city={randomCity} />
+          <h4 className="my-4 text-xl text-center font-bold dark:text-slate">
             {randomCity.nom_commune}
           </h4>
-          <GamePanel city={randomCity} />
         </div>
       ) : (
         <Loader />
