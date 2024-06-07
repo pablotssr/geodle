@@ -66,67 +66,76 @@ export default function Keyboard({
     };
   }, [onLetterClick, onSubmit, onDelete]);
 
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-center space-x-2">
-        {firstRow.map((key) => (
-          <Key
-            key={key}
-            value={key}
-            onLetterClick={(letter) => onLetterClick(letter)}
-            status={checkStatus(key)}
-            type="keyboard"
-          />
-        ))}
-      </div>
-      <div className="flex items-center justify-center space-x-2">
-        {secondRow.map((key) => (
-          <Key
-            key={key}
-            value={key}
-            onLetterClick={(letter) => onLetterClick(letter)}
-            status={checkStatus(key)}
-            type="keyboard"
-          />
-        ))}
-      </div>
-      <div className="flex items-center justify-center  space-x-2">
-        {thirdRow.map((key) => (
-          <Key
-            key={key}
-            value={key}
-            onLetterClick={(letter) => onLetterClick(letter)}
-            status={checkStatus(key)}
-            type="keyboard"
-          />
-        ))}
-      </div>
-      <div className="flex items-center justify-center space-x-2">
-        <Key
-          key={" "}
-          value={" "}
-          onLetterClick={(letter) => onLetterClick(letter)}
-          status={checkStatus(" ")}
-          type="spacebar"
-        />
-        <button
-          className="border-2hidden lg:inline-flex items-center justify-center w-12 h-12 bg-red-500 border-red-500 text-white rounded"
-          onClick={onDelete}>
-          <div className="flex items-center justify-center">
-            <FontAwesomeIcon icon={faDeleteLeft} />
-          </div>
-        </button>
-        <button
-          className="border-2 hidden lg:inline-flex items-center justify-center w-12 h-12 bg-green-500 border-green-500 text-white rounded" // La barre d'espace est plus large
-          onClick={onSubmit}>
-          <FontAwesomeIcon icon={faPaperPlane} />
-        </button>
-        <button
-          className="border-2	 hidden lg:inline-flex items-center justify-center w-12 h-12 bg-orange-500 border-orange-500 text-white rounded"
-          onClick={onReset}>
-          <FontAwesomeIcon icon={faArrowsRotate} />
-        </button>
-      </div>
-    </div>
-  );
+	return (
+		<div className="space-y-2">
+			<div className="flex items-center justify-center space-x-2">
+				{firstRow.map((key) => (
+					<Key
+						key={key}
+						value={key}
+						onLetterClick={(letter) => onLetterClick(letter)}
+						status={checkStatus(key)}
+						type="keyboard"
+					/>
+				))}
+			</div>
+			<div className="flex items-center justify-center space-x-2">
+				{secondRow.map((key) => (
+					<Key
+						key={key}
+						value={key}
+						onLetterClick={(letter) => onLetterClick(letter)}
+						status={checkStatus(key)}
+						type="keyboard"
+					/>
+				))}
+			</div>
+			<div className="flex items-center justify-center  space-x-2">
+				{thirdRow.map((key) => (
+					<Key
+						key={key}
+						value={key}
+						onLetterClick={(letter) => onLetterClick(letter)}
+						status={checkStatus(key)}
+						type="keyboard"
+					/>
+				))}
+			</div>
+			<div className="flex items-center justify-center space-x-2">
+				<Key
+					key={" "}
+					value={" "}
+					onLetterClick={(letter) => onLetterClick(letter)}
+					status={checkStatus(" ")}
+					type="spacebar"
+				/>
+				<div className="tooltip" data-tip="Delete last letter">
+					<button
+						className="border-2hidden lg:inline-flex items-center justify-center w-12 h-12 bg-red-500 border-red-500 text-white rounded"
+						onClick={onDelete}
+					>
+						<div className="flex items-center justify-center">
+							<FontAwesomeIcon icon={faDeleteLeft} />
+						</div>
+					</button>
+				</div>
+				<div className="tooltip" data-tip="Submit your word">
+					<button
+						className="border-2 hidden lg:inline-flex items-center justify-center w-12 h-12 bg-green-500 border-green-500 text-white rounded" // La barre d'espace est plus large
+						onClick={onSubmit}
+					>
+						<FontAwesomeIcon icon={faPaperPlane} />
+					</button>
+				</div>
+				<div className="tooltip" data-tip="Pick a new city">
+					<button
+						className="border-2	 hidden lg:inline-flex items-center justify-center w-12 h-12 bg-orange-500 border-orange-500 text-white rounded"
+						onClick={onReset}
+					>
+						<FontAwesomeIcon icon={faArrowsRotate} />
+					</button>
+				</div>
+			</div>
+		</div>
+	);
 }
