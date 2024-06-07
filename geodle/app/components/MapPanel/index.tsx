@@ -4,11 +4,11 @@ import { useState, useRef, useEffect } from "react";
 import { Markers, GameStates } from "../../lib/definitions";
 import { useSearchParams } from "next/navigation";
 import {
-	greenIcon,
 	iconRed,
-	iconBlue,
+	iconOrange,
 	iconYellow,
 	haversineDistance,
+	iconGreen,
 } from "../../lib/markers";
 import GameResultModal from "../Modal/GameResultModal";
 import dynamic from "next/dynamic";
@@ -17,6 +17,8 @@ import { useCityData } from "../../context/CityDataContext";
 import useDebounce from "../../hooks/useDebounce";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons/faArrowsRotate";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MyMap = dynamic(() => import("../Map/"), {
 	loading: () => <Loader />,
@@ -78,7 +80,12 @@ export default function MapPanel() {
 	};
 
 	const handleGuess = () => {
-		setNbTries((prevAttempts) => prevAttempts + 1);
+		if (gameState === "win")
+			toast.warn(
+				"You already won! Reset the game by generating a new city."
+			);
+
+		if (gameState === "playing") setNbTries((prevAttempts) => prevAttempts + 1);
 		const isCityMatched =
 			jsonData &&
 			jsonData.some(
@@ -98,15 +105,15 @@ export default function MapPanel() {
 				randomCity!.geo_point_2d,
 				matchedCityPosition
 			);
-			let icon = iconBlue;
+			let icon = iconGreen;
 
-			if (distance < 100) {
-				icon = iconRed;
-			} else if (distance < 400) {
+			if (distance === 0) {
+				icon = iconGreen;
+			} else if (distance < 100) {
 				icon = iconYellow;
-			} else {
-				icon = iconBlue;
-			}
+			} else if (distance < 300) {
+				icon = iconOrange;
+			} else icon = iconRed;
 
 			const newMarker: Markers = {
 				position: matchedCityPosition,
@@ -117,6 +124,7 @@ export default function MapPanel() {
 			setMarkers((prevMarkers) =>
 				prevMarkers ? [...prevMarkers, newMarker] : [newMarker]
 			);
+			setGuess("");
 		}
 
 		if (

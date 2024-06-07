@@ -35,7 +35,7 @@ export const iconRed = new L.Icon({
   shadowSize: [41, 41],
 });
 
-export const greenIcon = new L.Icon({
+export const iconGreen = new L.Icon({
   iconUrl:
     "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
   iconSize: [25, 41],
