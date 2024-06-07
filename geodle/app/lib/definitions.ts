@@ -1,4 +1,7 @@
 import { LatLngTuple } from "leaflet";
+import { ReactNode } from "react";
+
+export const DEBUG = true;
 
 export interface City {
   gid: string;
@@ -67,16 +70,53 @@ export interface City {
   department_number: string;
 }
 
-
 interface Cell {
-	value: string;
-	status: CharStatus;
+  value: string;
+  status: CharStatus;
 }
 
-
-
 export interface City {
-	zip_code: string;
-	city_code: string;
-	department_number: string;
+  zip_code: string;
+  city_code: string;
+  department_number: string;
+}
+
+export enum GameStates {
+  "playing",
+  "win",
+  "lose",
+}
+export enum Statuses {
+  "absent",
+  "present",
+  "correct",
+  "guessing",
+}
+
+export type CharStatus = keyof typeof Statuses;
+
+interface Cell {
+  value: string;
+  status: CharStatus;
+}
+
+export type Row = Cell[];
+
+export interface GamePanelProps {
+  city: City;
+}
+
+export interface MapPanelProps {
+  city: City;
+}
+
+export interface CityDataContextType {
+  randomCity: City | null;
+  cityDataMap: Map<string, City> | null;
+  jsonData: any[];
+  generateRandomCity: () => void;
+}
+
+export interface CityDataProviderProps {
+  children: ReactNode;
 }
