@@ -110,26 +110,32 @@ export default function Keyboard({
 					status={checkStatus(" ")}
 					type="spacebar"
 				/>
-				<button
-					className="border-2hidden lg:inline-flex items-center justify-center w-12 h-12 bg-red-500 border-red-500 text-white rounded"
-					onClick={onDelete}
-				>
-					<div className="flex items-center justify-center">
-						<FontAwesomeIcon icon={faDeleteLeft} />
-					</div>
-				</button>
-				<button
-					className="border-2 hidden lg:inline-flex items-center justify-center w-12 h-12 bg-green-500 border-green-500 text-white rounded" // La barre d'espace est plus large
-					onClick={onSubmit}
-				>
-					<FontAwesomeIcon icon={faPaperPlane} />
-				</button>
-				<button
-					className="border-2	 hidden lg:inline-flex items-center justify-center w-12 h-12 bg-orange-500 border-orange-500 text-white rounded"
-					onClick={onReset}
-				>
-					<FontAwesomeIcon icon={faArrowsRotate} />
-				</button>
+				<div className="tooltip" data-tip="Delete last letter">
+					<button
+						className="border-2hidden lg:inline-flex items-center justify-center w-12 h-12 bg-red-500 border-red-500 text-white rounded"
+						onClick={onDelete}
+					>
+						<div className="flex items-center justify-center">
+							<FontAwesomeIcon icon={faDeleteLeft} />
+						</div>
+					</button>
+				</div>
+				<div className="tooltip" data-tip="Submit your word">
+					<button
+						className="border-2 hidden lg:inline-flex items-center justify-center w-12 h-12 bg-green-500 border-green-500 text-white rounded" // La barre d'espace est plus large
+						onClick={onSubmit}
+					>
+						<FontAwesomeIcon icon={faPaperPlane} />
+					</button>
+				</div>
+				<div className="tooltip" data-tip="Pick a new city">
+					<button
+						className="border-2	 hidden lg:inline-flex items-center justify-center w-12 h-12 bg-orange-500 border-orange-500 text-white rounded"
+						onClick={onReset}
+					>
+						<FontAwesomeIcon icon={faArrowsRotate} />
+					</button>
+				</div>
 			</div>
 		</div>
 	);
