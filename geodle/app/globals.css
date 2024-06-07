@@ -6,3 +6,7 @@
     @apply h-[50vh];
     @apply w-[50vh];
 }
+
+.leaflet-control-attribution{
+    display: none;
+}
