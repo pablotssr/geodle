@@ -3,7 +3,6 @@
 import Loader from "../components/Layout/loader";
 import GamePanel from "../components/GamePanel";
 import { useCityData } from "../context/CityDataContext";
-import MapPanel from "../components/MapPanel";
 
 export default function Jeu() {
   const { randomCity } = useCityData();
