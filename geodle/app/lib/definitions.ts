@@ -1,4 +1,5 @@
 import { LatLngTuple } from "leaflet";
+import { ReactNode } from "react";
 
 export const DEBUG = true;
 
@@ -55,3 +56,22 @@ interface Cell {
 }
 
 export type Row = Cell[];
+
+export interface GamePanelProps {
+  city: City;
+}
+
+export interface MapPanelProps {
+  city: City;
+}
+
+export interface CityDataContextType {
+  randomCity: City | null;
+  cityDataMap: Map<string, City> | null;
+  jsonData: any[];
+  generateRandomCity: () => void;
+}
+
+export interface CityDataProviderProps {
+  children: ReactNode;
+}

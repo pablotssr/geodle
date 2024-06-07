@@ -1,5 +1,5 @@
 import { GameStates } from "@/app/lib/definitions";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function GameResultModal({
 	gameState,
@@ -9,12 +9,19 @@ export default function GameResultModal({
 	resetGame: () => void;
 }) {
 	const [isOpen, setIsOpen] = useState(false);
+	const playAgainButtonRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
 		if (gameState === "win" || gameState === "lose") {
 			setIsOpen(true);
 		}
 	}, [gameState]);
+
+	useEffect(() => {
+		if (!isOpen && gameState !== "playing" && playAgainButtonRef.current) {
+			playAgainButtonRef.current.blur();
+		}
+	}, [isOpen, gameState]);
 
 	return (
 		<>
@@ -46,6 +53,7 @@ export default function GameResultModal({
 					<div className="modal-footer">
 						<div className="flex items-center justify-end">
 							<button
+								ref={playAgainButtonRef}
 								className="btn btn-primary"
 								onClick={() => {
 									setIsOpen(false);

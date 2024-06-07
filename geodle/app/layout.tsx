@@ -3,7 +3,7 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import Header from "./components/Layout/header";
 import Footer from "./components/Layout/footer";
-import { CityDataProvider } from './context/CityDataContext.js';
+import { CityDataProvider } from './context/CityDataContext';
 
 export const metadata: Metadata = {
 	title: {

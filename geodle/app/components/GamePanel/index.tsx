@@ -1,61 +1,99 @@
-import { GameStates, Row } from "@/app/lib/definitions";
 import { useEffect, useState } from "react";
-import Key from "../Key";
-import Keyboard from "../Keyboard";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  GameStates,
+  Row,
+  Statuses,
+  GamePanelProps,
+  City,
+} from "@/app/lib/definitions";
+import Key from "../Key";
+import Keyboard from "../Keyboard";
 import GameResultModal from "../Modal/GameResultModal";
+import { useCityData } from "@/app/context/CityDataContext";
 
-export default function GamePanel({ nom_commune }: { nom_commune: any }) {
-  console.log("cityName: ",nom_commune)
+export default function GamePanel({ city }: GamePanelProps) {
+  const { generateRandomCity } = useCityData();
   const [rows, setRows] = useState<Row[]>([]);
   const [currentRowIndex, setCurrentRowIndex] = useState(0);
-  const [text, setText] = useState("");
-  const [solution, setSolution] = useState("");
+  const [text, setText] = useState<string>("");
+  const [solution, setSolution] = useState<string>(city.nom_commune);
   const [gameState, setGameState] = useState<keyof typeof GameStates>("playing");
-
-  const word = nom_commune;
   const nbEssais = 5;
 
-  const handleLetterClick = (letter: string) => {
-    if (text.length >= word.length) return;
-    setText((prevText) => prevText + letter);
-  };
+  useEffect(() => {
+    initializeGame(city);
+  }, [city]);
 
-  const handleReset = () => {
-    const temp: Row[] = Array(nbEssais).fill(
-      Array(word.length).fill({ value: "", status: "guessing" })
+  const initializeGame = (newCity: City) => {
+    const citySolution = newCity.nom_commune;
+    setSolution(citySolution);
+    const temp: Row[] = Array.from({ length: nbEssais }, () =>
+      Array.from({ length: citySolution.length }, () => ({
+        value: "",
+        status: "guessing",
+      }))
     );
     setRows(temp);
     setCurrentRowIndex(0);
-    setSolution(word); // Ajout de la réinitialisation de la solution
     setGameState("playing");
     setText("");
   };
 
+  const handleLetterClick = (letter: string) => {
+    if (text.length >= solution.length || gameState !== "playing") return;
+    const newText = text + letter;
+    setText(newText);
+
+    setRows((prevRows) => {
+      const newRows = [...prevRows];
+      const newCurrentRow = [...newRows[currentRowIndex]];
+      newText.split('').forEach((char, idx) => {
+        if (newCurrentRow[idx]) {
+          newCurrentRow[idx].value = char;
+        }
+      });
+      newRows[currentRowIndex] = newCurrentRow;
+      return newRows;
+    });
+  };
+
+  const handleReset = () => {
+    generateRandomCity();
+  };
+
   const deleteChar = () => {
-    setText((prevText) => prevText.slice(0, -1));
+    const newText = text.slice(0, -1);
+    setText(newText);
+
+    setRows((prevRows) => {
+      const newRows = [...prevRows];
+      const newCurrentRow = [...newRows[currentRowIndex]];
+      newCurrentRow[newText.length] = { value: "", status: "guessing" };
+      newRows[currentRowIndex] = newCurrentRow;
+      return newRows;
+    });
   };
 
   const handleSubmit = () => {
-    if (text.length !== word.length) {
-      toast.error(
-        text.length < word.length
-          ? "Please fill in the word"
-          : "Please delete some letters in the word"
-      );
-      return;
+    if (gameState === "playing") {
+      if (text.length !== solution.length) {
+        toast.error(
+          text.length < solution.length
+            ? "Please fill in the word"
+            : "Please delete some letters in the word"
+        );
+        return;
+      }
     }
 
-    // Ajout de la condition pour empêcher la soumission si le jeu est terminé
-    if (gameState !== "playing") return;
-
     getStatuses();
-    if (text === solution.toUpperCase()) {
+    if (text.toUpperCase() === solution.toUpperCase()) {
       setGameState("win");
       return;
     }
-    if (currentRowIndex === 5 && text !== solution.toUpperCase()) {
+    if (currentRowIndex === nbEssais - 1 && text.toUpperCase() !== solution.toUpperCase()) {
       setGameState("lose");
       return;
     }
@@ -66,9 +104,11 @@ export default function GamePanel({ nom_commune }: { nom_commune: any }) {
   const getStatuses = () => {
     const currentRow = [...rows[currentRowIndex]];
     for (let i = 0; i < currentRow.length; i++) {
-      if (solution.toLowerCase().includes(text[i].toLowerCase())) {
+      if (solution.toUpperCase().includes(text[i].toUpperCase())) {
         currentRow[i].status =
-          solution[i] === text[i].toLowerCase() ? "correct" : "present";
+          solution[i].toUpperCase() === text[i].toUpperCase()
+            ? "correct"
+            : "present";
       } else {
         currentRow[i].status = "absent";
       }
@@ -80,27 +120,6 @@ export default function GamePanel({ nom_commune }: { nom_commune: any }) {
     });
   };
 
-  useEffect(() => {
-    // Assurez-vous d'avoir une solution lors du reset
-    if (word) {
-      setSolution(word.toUpperCase());
-      handleReset();
-    }
-  }, [word]); // Assurez-vous que la dépendance est word
-
-  useEffect(() => {
-    if (rows.length === 0) return;
-    const currentRow = rows[currentRowIndex].map((cell, i) => ({
-      ...cell,
-      value: text[i] || "",
-    }));
-    setRows((prevRows) => {
-      const newRows = [...prevRows];
-      newRows[currentRowIndex] = currentRow;
-      return newRows;
-    });
-  }, [text]);
-
   return (
     <>
       <div className="flex justify-center items-center h-full flex-col space-y-20">
@@ -111,8 +130,7 @@ export default function GamePanel({ nom_commune }: { nom_commune: any }) {
                 <Key
                   key={idx}
                   value={guess.value}
-                  status={guess.status as any}
-                  onLetterClick={handleLetterClick}
+                  status={guess.status as keyof typeof Statuses}
                   type="cell"
                 />
               ))}
@@ -127,7 +145,7 @@ export default function GamePanel({ nom_commune }: { nom_commune: any }) {
           onReset={handleReset}
         />
       </div>
-      <GameResultModal gameState={gameState} resetGame={handleReset} />
+      <GameResultModal gameState={gameState} resetGame={() => handleReset()} />
     </>
   );
 }

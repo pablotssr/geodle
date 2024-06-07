@@ -16,7 +16,7 @@ export default function Key({ value, status, onLetterClick, type }: Props) {
 		<div
 			onClick={handleOnLetterClick}
 			className={
-				"bg-base-200 transition flex justify-center items-center border-2 rounded w-16 h-16 " +
+				"bg-base-200 transition flex justify-center items-center border-2 rounded w-16 h-16 text-uppercase " +
 				(status === "correct"
 					? "bg-green-500 border-green-500 text-white"
 					: status === "present"

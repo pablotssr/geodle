@@ -6,7 +6,8 @@ import { faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
 
 const firstRow = ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P"];
 const secondRow = ["Q", "S", "D", "F", "G", "H", "J", "K", "L", "M"];
-const thirdRow = ["W", "X", "C", "V", "B", "N", "-"];
+const thirdRow = ["W", "X", "C", "V", "B", "N"];
+const forthRow = ["-", " ", "'"];
 
 type Props = {
 	onLetterClick: (letter: string) => void;
@@ -41,18 +42,34 @@ export default function Keyboard({
 				onDelete();
 			}
 			const key = e.key.toUpperCase();
-			if (key.length === 1 && key >= "A" && key <= "Z") onLetterClick(key);
+			if (
+				key.length === 1 &&
+				((key >= "A" && key <= "Z") || key === "-" || key === "'")
+			) {
+				onLetterClick(key);
+			}
 		}
+
+		function spaceKeyListener(e: KeyboardEvent) {
+			if (e.code === "Space") {
+				e.preventDefault();
+				onLetterClick(" ");
+			}
+		}
+
 		window.addEventListener("keyup", listener);
+		window.addEventListener("keydown", spaceKeyListener);
+
 		return () => {
 			window.removeEventListener("keyup", listener);
+			window.removeEventListener("keydown", spaceKeyListener);
 		};
-	});
+	}, [onLetterClick, onSubmit, onDelete]);
 
 	return (
 		<div className="space-y-8">
 			<div className="flex items-center justify-center space-x-4">
-				{firstRow.map((key, idx) => (
+				{firstRow.map((key) => (
 					<Key
 						key={key}
 						value={key}
@@ -63,7 +80,7 @@ export default function Keyboard({
 				))}
 			</div>
 			<div className="flex items-center justify-center space-x-4">
-				{secondRow.map((key, idx) => (
+				{secondRow.map((key) => (
 					<Key
 						key={key}
 						value={key}
@@ -74,7 +91,18 @@ export default function Keyboard({
 				))}
 			</div>
 			<div className="flex items-center justify-center space-x-4">
-				{thirdRow.map((key, idx) => (
+				{thirdRow.map((key) => (
+					<Key
+						key={key}
+						value={key}
+						onLetterClick={(letter) => onLetterClick(letter)}
+						status={checkStatus(key)}
+						type="keyboard"
+					/>
+				))}
+			</div>
+			<div className="flex items-center justify-center space-x-4">
+				{forthRow.map((key) => (
 					<Key
 						key={key}
 						value={key}

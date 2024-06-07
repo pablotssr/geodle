@@ -1,33 +1,23 @@
 'use client';
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function MenuPage() {
-  const router = useRouter();
-
-  const handlePlayPrefecture = () => {
-    router.push('/jeu?type=Prefecture');
-  };
-
-  const handlePlaySousPrefecture = () => {
-    router.push('/jeu?type=SousPrefecture');
-  };
-
   return (
     <div className="p-6 space-y-4">
       <h2 className="text-2xl font-bold">Choose your game mode</h2>
-      <button
+      <Link
         className="btn btn-primary btn-lg w-full"
-        onClick={handlePlayPrefecture}
+        href="/word"
       >
-        Play with Prefecture
-      </button>
-      <button
+        Word the city 
+      </Link>
+      <Link
         className="btn btn-primary btn-lg w-full"
-        onClick={handlePlaySousPrefecture}
+        href="/map"
       >
-        Play with Sous-Prefecture
-      </button>
+        Map the city
+      </Link>
     </div>
   );
 }
