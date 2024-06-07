@@ -35,14 +35,18 @@ const Map: React.FC<MyMapProps> = ({
   markers,
 }) => {
   return (
-    <MapContainer center={position} zoom={zoom} scrollWheelZoom={true}>
+    <MapContainer
+      className="mt-9 rounded"
+      center={position}
+      zoom={zoom}
+      scrollWheelZoom={true}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {markers.map((marker, index) => (
         <Marker key={index} position={marker.position} icon={marker.icon}>
-          <Popup>{`Attempt ${marker.nom_commune}`}</Popup>
+          <Popup>{`${marker.nom_commune}`}</Popup>
         </Marker>
       ))}
     </MapContainer>
