@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useContext, useState, useEffect } from "react";
-import { City, CityDataContextType, CityDataProviderProps } from "../lib/definitions";
+import { City, CityAdditionalData, CityDataContextType, CityDataProviderProps } from "../lib/definitions";
 
 const CityDataContext = createContext<CityDataContextType | undefined>(undefined);
 
@@ -15,7 +15,7 @@ export const useCityData = (): CityDataContextType => {
 export const CityDataProvider = ({ children }: CityDataProviderProps): JSX.Element => {
   const [randomCity, setRandomCity] = useState<City | null>(null);
   const [jsonData, setJsonData] = useState<any[]>([]);
-  const [cityDataMap, setCityDataMap] = useState<Map<string, City> | null>(null);
+  const [cityDataMap, setCityDataMap] = useState<Map<string, CityAdditionalData> | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -32,8 +32,8 @@ export const CityDataProvider = ({ children }: CityDataProviderProps): JSX.Eleme
           throw new Error('Network response was not ok');
         }
         const citiesData = await citiesResponse.json();
-        const cityMap = new Map<string, City>(
-          citiesData.cities.map((city: City) => [removeAccents(city.insee_commune), { ...city, nom_commune: removeAccents(city.nom_commune) }])
+        const cityMap: Map<string, CityAdditionalData> = new Map(
+          citiesData.cities.map((city: CityAdditionalData) => [city.insee_code, city])
         );
         setCityDataMap(cityMap);
       } catch (error) {
@@ -55,7 +55,9 @@ export const CityDataProvider = ({ children }: CityDataProviderProps): JSX.Eleme
       const randomIndex = Math.floor(Math.random() * jsonData.length);
       const randomCityData = jsonData[randomIndex];
       const additionalData = cityDataMap.get(randomCityData.insee_commune);
-      setRandomCity({ ...randomCityData, additionalData });
+      const nom_commune_without_accents = removeAccents(randomCityData.nom_commune);
+      setRandomCity({ ...randomCityData, additionalData, nom_commune: nom_commune_without_accents });
+      console.log("1", { ...randomCityData, additionalData });
     }
   };
 
@@ -65,7 +67,9 @@ export const CityDataProvider = ({ children }: CityDataProviderProps): JSX.Eleme
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .replace(/ç/g, "c")
-      .replace(/Ç/g, "C");
+      .replace(/Ç/g, "C")
+      .replace(/é/g, "e")
+      .replace(/È/g, "E")
   };
 
   const contextValue: CityDataContextType = {
