@@ -81,9 +81,7 @@ export default function MapPanel() {
 
 	const handleGuess = () => {
 		if (gameState === "win")
-			toast.warn(
-				"You already won! Reset the game by generating a new city."
-			);
+			toast.warn("You already won! Reset the game by generating a new city.");
 
 		if (gameState === "playing") setNbTries((prevAttempts) => prevAttempts + 1);
 		const isCityMatched =
@@ -195,16 +193,6 @@ export default function MapPanel() {
 							disabled={nbTries < 3}
 							onClick={() =>
 								randomCity.additionalData &&
-								handleIndiceClick(randomCity.additionalData.zip_code)
-							}
-						>
-							Code postal
-						</button>
-						<button
-							className="btn btn-neutral"
-							disabled={nbTries < 5}
-							onClick={() =>
-								randomCity.additionalData &&
 								handleIndiceClick(randomCity.additionalData.region_name)
 							}
 						>
@@ -212,13 +200,23 @@ export default function MapPanel() {
 						</button>
 						<button
 							className="btn btn-neutral"
-							disabled={nbTries < 8}
+							disabled={nbTries < 5}
 							onClick={() =>
 								randomCity.additionalData &&
 								handleIndiceClick(randomCity.additionalData.department_name)
 							}
 						>
 							Département
+						</button>
+						<button
+							className="btn btn-neutral"
+							disabled={nbTries < 8}
+							onClick={() =>
+								randomCity.additionalData &&
+								handleIndiceClick(randomCity.additionalData.zip_code)
+							}
+						>
+							Code postal
 						</button>
 					</div>
 				</div>
