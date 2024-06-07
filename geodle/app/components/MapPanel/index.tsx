@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
 	Markers,
 	GameStates,
@@ -17,6 +17,8 @@ import GameResultModal from "../Modal/GameResultModal";
 import dynamic from "next/dynamic";
 import Loader from "../Layout/loader";
 import { useCityData } from "../../context/CityDataContext";
+import useDebounce from "../../hooks/useDebounce";
+
 const MyMap = dynamic(() => import("../Map/"), {
 	loading: () => <Loader />,
 	ssr: false,
@@ -39,6 +41,8 @@ export default function MapPanel() {
 		useState<number>(-1);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const suggestionsRef = useRef<HTMLDivElement>(null);
+
+	const debouncedGuess = useDebounce(guess, 500);
 
 	const handleIndiceClick = (value: string) => {
 		setIndice(value);
@@ -70,13 +74,6 @@ export default function MapPanel() {
 					setShowSuggestions(false);
 					input.focus();
 				}
-			}
-		} else if (event.key === "Enter" && selectedSuggestionIndex !== -1) {
-			event.preventDefault();
-			setGuess(suggestions[selectedSuggestionIndex]);
-			setShowSuggestions(false);
-			if (inputRef.current) {
-				inputRef.current.focus();
 			}
 		}
 	};
@@ -135,24 +132,14 @@ export default function MapPanel() {
 	};
 
 	const handleGuessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const value = event.target.value.toLowerCase();
-		setGuess(value);
-		if (value.trim() !== "") {
+		setGuess(event.target.value.toLowerCase());
+	};
+
+	useEffect(() => {
+		if (debouncedGuess.trim() !== "") {
 			const filteredSuggestions = jsonData
-				? jsonData
-						.filter((city) => {
-							if (type === "Prefecture") {
-								return (
-									city.type === "Préfecture" ||
-									city.type === "Préfecture de région"
-								);
-							} else if (type === "SousPrefecture") {
-								return city.type === "Sous-préfecture";
-							}
-							return false;
-						})
-						.map((city) => city.nom_commune.toLowerCase())
-						.filter((city) => city.startsWith(value))
+				? jsonData.map((city) => city.nom_commune.toLowerCase())
+						.filter((city) => city.startsWith(debouncedGuess))
 				: [];
 			setSuggestions(filteredSuggestions);
 			setShowSuggestions(true);
@@ -161,7 +148,7 @@ export default function MapPanel() {
 			setSuggestions([]);
 			setShowSuggestions(false);
 		}
-	};
+	}, [debouncedGuess, jsonData, type]);
 
 	const handleSuggestionClick = (suggestion: string, index: number) => {
 		setGuess(suggestion);
@@ -252,7 +239,7 @@ export default function MapPanel() {
 					{isCorrect && <div></div>}
 					{showSuggestions && (
 						<div
-							className="suggestions-container bg-zinc-900 rounded-lg"
+							className="suggestions-container bg-base-200 border-base-200 border-2 rounded-lg"
 							ref={suggestionsRef}
 						>
 							{suggestions.map((suggestion, index) => (
