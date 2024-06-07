@@ -44,11 +44,12 @@ const Map: React.FC<MyMapProps> = ({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {markers.map((marker, index) => (
-        <Marker key={index} position={marker.position} icon={marker.icon}>
-          <Popup>{`${marker.nom_commune}`}</Popup>
-        </Marker>
-      ))}
+      {markers != null &&
+        markers.map((marker, index) => (
+          <Marker key={index} position={marker.position} icon={marker.icon}>
+            <Popup>{`${marker.nom_commune}`}</Popup>
+          </Marker>
+        ))}
     </MapContainer>
   );
 };

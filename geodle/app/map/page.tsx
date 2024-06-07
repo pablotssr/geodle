@@ -107,6 +107,7 @@ export default function Jeu() {
         inputRef.current.focus();
       }
     }
+    console.log(showSuggestions);
   };
 
   useEffect(() => {
@@ -126,18 +127,6 @@ export default function Jeu() {
       const randomCityData = filteredCities[randomIndex];
       const additionalData = cityDataMap.get(randomCityData.insee_commune);
       setRandomCity({ ...randomCityData, additionalData });
-      if (randomCityData && additionalData) {
-        const newMarker: Markers = {
-          position: [
-            parseFloat(additionalData.latitude),
-            parseFloat(additionalData.longitude),
-          ],
-          nom_commune: randomCityData.nom_commune,
-          icon: greenIcon,
-        };
-
-        setMarkers([newMarker]);
-      }
     }
   }, [jsonData, cityDataMap, type]);
 
