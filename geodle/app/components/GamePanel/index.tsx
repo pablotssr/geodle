@@ -19,7 +19,8 @@ export default function GamePanel({ city }: GamePanelProps) {
   const [currentRowIndex, setCurrentRowIndex] = useState(0);
   const [text, setText] = useState<string>("");
   const [solution, setSolution] = useState<string>(city.nom_commune);
-  const [gameState, setGameState] = useState<keyof typeof GameStates>("playing");
+  const [gameState, setGameState] =
+    useState<keyof typeof GameStates>("playing");
   const nbEssais = 5;
 
   useEffect(() => {
@@ -49,7 +50,7 @@ export default function GamePanel({ city }: GamePanelProps) {
     setRows((prevRows) => {
       const newRows = [...prevRows];
       const newCurrentRow = [...newRows[currentRowIndex]];
-      newText.split('').forEach((char, idx) => {
+      newText.split("").forEach((char, idx) => {
         if (newCurrentRow[idx]) {
           newCurrentRow[idx].value = char;
         }
@@ -93,7 +94,10 @@ export default function GamePanel({ city }: GamePanelProps) {
       setGameState("win");
       return;
     }
-    if (currentRowIndex === nbEssais - 1 && text.toUpperCase() !== solution.toUpperCase()) {
+    if (
+      currentRowIndex === nbEssais - 1 &&
+      text.toUpperCase() !== solution.toUpperCase()
+    ) {
       setGameState("lose");
       return;
     }

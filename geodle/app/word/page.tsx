@@ -1,6 +1,6 @@
 "use client";
 
-import Loader from "../components/Layout/Loader";
+import Loader from "../components/Layout/loader";
 import GamePanel from "../components/GamePanel";
 import { useCityData } from "../context/CityDataContext";
 import MapPanel from "../components/MapPanel";

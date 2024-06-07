@@ -11,61 +11,60 @@ const secondRow = ["Q", "S", "D", "F", "G", "H", "J", "K", "L", "M"];
 const thirdRow = ["W", "X", "C", "V", "B", "N", "-", "'"];
 
 type Props = {
-	onLetterClick: (letter: string) => void;
-	onSubmit: () => void;
-	onDelete: () => void;
-	onReset: () => void;
-	rows: Row[];
+  onLetterClick: (letter: string) => void;
+  onSubmit: () => void;
+  onDelete: () => void;
+  onReset: () => void;
+  rows: Row[];
 };
 
 export default function Keyboard({
-	onLetterClick,
-	onSubmit,
-	rows,
-	onDelete,
-	onReset,
+  onLetterClick,
+  onSubmit,
+  rows,
+  onDelete,
+  onReset,
 }: Props) {
-	const cells = useMemo(() => rows.flat(), [rows]);
+  const cells = useMemo(() => rows.flat(), [rows]);
 
-	const checkStatus = (key: string) => {
-		for (let i = 0; i < cells.length; i++) {
-			if (cells[i].value === key && cells[i].status === "absent")
-				return "absent";
-		}
-		return "guessing";
-	};
+  const checkStatus = (key: string) => {
+    const cell = cells.find(
+      (cell) => cell.value === key && cell.status === "absent"
+    );
+    return cell ? "absent" : "guessing";
+  };
 
-	useEffect(() => {
-		function listener(e: KeyboardEvent) {
-			if (e.code === "Enter") {
-				onSubmit();
-			} else if (e.code === "Backspace") {
-				onDelete();
-			}
-			const key = e.key.toUpperCase();
-			if (
-				key.length === 1 &&
-				((key >= "A" && key <= "Z") || key === "-" || key === "'")
-			) {
-				onLetterClick(key);
-			}
-		}
+  useEffect(() => {
+    function listener(e: KeyboardEvent) {
+      if (e.code === "Enter") {
+        onSubmit();
+      } else if (e.code === "Backspace") {
+        onDelete();
+      }
+      const key = e.key.toUpperCase();
+      if (
+        key.length === 1 &&
+        ((key >= "A" && key <= "Z") || key === "-" || key === "'")
+      ) {
+        onLetterClick(key);
+      }
+    }
 
-		function spaceKeyListener(e: KeyboardEvent) {
-			if (e.code === "Space") {
-				e.preventDefault();
-				onLetterClick(" ");
-			}
-		}
+    function spaceKeyListener(e: KeyboardEvent) {
+      if (e.code === "Space") {
+        e.preventDefault();
+        onLetterClick(" ");
+      }
+    }
 
-		window.addEventListener("keyup", listener);
-		window.addEventListener("keydown", spaceKeyListener);
+    window.addEventListener("keyup", listener);
+    window.addEventListener("keydown", spaceKeyListener);
 
-		return () => {
-			window.removeEventListener("keyup", listener);
-			window.removeEventListener("keydown", spaceKeyListener);
-		};
-	}, [onLetterClick, onSubmit, onDelete]);
+    return () => {
+      window.removeEventListener("keyup", listener);
+      window.removeEventListener("keydown", spaceKeyListener);
+    };
+  }, [onLetterClick, onSubmit, onDelete]);
 
 	return (
 		<div className="space-y-2">
