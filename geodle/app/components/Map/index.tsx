@@ -42,7 +42,7 @@ const Map: React.FC<MyMapProps> = ({
 	markers,
 }) => {
 	const [tileLayerUrl, setTileLayerUrl] = useState<string>(
-		"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+		"https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png"
 	);
 
 	useEffect(() => {
@@ -52,8 +52,8 @@ const Map: React.FC<MyMapProps> = ({
 		).matches;
 		// Select tile layer URL based on system theme
 		const tileLayerUrl = prefersDarkMode
-			? "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"
-			: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+			? "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
+			: "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png";
 
 		setTileLayerUrl(tileLayerUrl);
 	}, []);
@@ -67,10 +67,9 @@ const Map: React.FC<MyMapProps> = ({
 			minZoom={5}
 			scrollWheelZoom={true}
 			maxBounds={franceBounds}
-			maxBoundsViscosity={1.0} 
+			maxBoundsViscosity={1.0}
 		>
 			<TileLayer
-				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 				url={tileLayerUrl}
 			/>
 			{markers.map((marker, index) => (
