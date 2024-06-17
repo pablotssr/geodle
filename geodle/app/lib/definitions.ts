@@ -81,6 +81,9 @@ export interface City {
 	department_number: string;
 }
 
+
+
+
 interface Cell {
 	value: string;
 	status: CharStatus;
