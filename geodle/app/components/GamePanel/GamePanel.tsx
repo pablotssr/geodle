@@ -108,16 +108,38 @@ export default function GamePanel({ city }: GamePanelProps) {
 
     const getStatuses = () => {
         const currentRow = [...rows[currentRowIndex]];
+        const solutionUpperCase = solution.toUpperCase();
+        const textUpperCase = text.toUpperCase();
+
+        // Count occurrences of each letter in the solution
+        const letterCounts: { [key: string]: number } = {};
+        for (let char of solutionUpperCase) {
+            if (!letterCounts[char]) {
+                letterCounts[char] = 0;
+            }
+            letterCounts[char]++;
+        }
+
+        // First pass: mark correct letters
         for (let i = 0; i < currentRow.length; i++) {
-            if (solution.toUpperCase().includes(text[i].toUpperCase())) {
-                currentRow[i].status =
-                    solution[i].toUpperCase() === text[i].toUpperCase()
-                        ? "correct"
-                        : "present";
-            } else {
-                currentRow[i].status = "absent";
+            if (solutionUpperCase[i] === textUpperCase[i]) {
+                currentRow[i].status = "correct";
+                letterCounts[textUpperCase[i]]--;
             }
         }
+
+        // Second pass: mark present and absent letters
+        for (let i = 0; i < currentRow.length; i++) {
+            if (currentRow[i].status !== "correct") {
+                if (letterCounts[textUpperCase[i]] > 0) {
+                    currentRow[i].status = "present";
+                    letterCounts[textUpperCase[i]]--;
+                } else {
+                    currentRow[i].status = "absent";
+                }
+            }
+        }
+
         setRows((prevRows) => {
             const newRows = [...prevRows];
             newRows[currentRowIndex] = currentRow;

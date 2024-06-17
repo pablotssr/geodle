@@ -42,6 +42,7 @@ export enum GameStates {
 	"win",
 	"lose",
 }
+
 export enum Statuses {
 	"absent",
 	"present",
