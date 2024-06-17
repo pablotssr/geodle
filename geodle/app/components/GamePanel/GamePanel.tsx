@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import {
     GameStates,
     Row,
@@ -63,6 +62,7 @@ export default function GamePanel({ city }: GamePanelProps) {
 
     const handleReset = () => {
         generateRandomCity();
+        toast.info("A new city has been generated!");
     };
 
     const deleteChar = () => {

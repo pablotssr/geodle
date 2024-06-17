@@ -1,12 +1,16 @@
 import { HintsProps } from "@/app/lib/definitions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Hints = ({ randomCity, nbTries, gamemode }: HintsProps) => {
     const [hint, setHint] = useState<string | null>(null);
     const handleHintClick = (value: string) => {
         setHint(value);
     };
+    // Enlever les indices quand reset
 
+    useEffect(() =>{
+        setHint("");
+    },[randomCity])
     return (
         <div className="flex items-center gap-2 flex-col">
             <h4 className="font-bold text-lg">Hints</h4>
