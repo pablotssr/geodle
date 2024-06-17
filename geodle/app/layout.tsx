@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
-import Header from "./components/Layout/header";
-import Footer from "./components/Layout/footer";
+import Header from "./components/Layout/Header";
+import Footer from "./components/Layout/Footer";
 import { CityDataProvider } from "./context/CityDataContext";
 
 export const metadata: Metadata = {

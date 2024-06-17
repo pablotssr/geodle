@@ -8,8 +8,8 @@ import {
   GamePanelProps,
   City,
 } from "@/app/lib/definitions";
-import Key from "../Key";
-import Keyboard from "../Keyboard";
+import Key from "../Key/Index";
+import Keyboard from "../Keyboard/Index";
 import GameResultModal from "../Modal/GameResultModal";
 import { useCityData } from "@/app/context/CityDataContext";
 

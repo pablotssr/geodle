@@ -12,7 +12,7 @@ import {
 } from "../../lib/markers";
 import GameResultModal from "../Modal/GameResultModal";
 import dynamic from "next/dynamic";
-import Loader from "../Layout/loader";
+import Loader from "../Layout/Loader";
 import { useCityData } from "../../context/CityDataContext";
 import useDebounce from "../../hooks/useDebounce";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons/faArrowsRotate";
@@ -20,7 +20,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const MyMap = dynamic(() => import("../Map/"), {
+const MyMap = dynamic(() => import("../Map/Index"), {
 	loading: () => <Loader />,
 	ssr: false,
 });

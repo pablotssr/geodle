@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import MapPanel from "../components/MapPanel";
+import MapPanel from "../components/MapPanel/Index";
 import { useCityData } from "../context/CityDataContext";
-import Loader from "../components/Layout/loader";
+import Loader from "../components/Layout/Loader";
 import { DEBUG } from "../lib/definitions";
 
 const Map = () => {

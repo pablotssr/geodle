@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/context/CityDataContext.tsx", "app/components/Layout/loader.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/context/CityDataContext.tsx", "app/components/Layout/Loader.tsx"],
   "exclude": ["node_modules"]
 }
