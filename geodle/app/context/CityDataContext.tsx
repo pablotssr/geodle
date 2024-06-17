@@ -97,7 +97,16 @@ export const CityDataProvider = ({
       .replace(/ç/g, "c")
       .replace(/Ç/g, "C")
       .replace(/é/g, "e")
-      .replace(/È/g, "E");
+      .replace(/è/g, "e")
+      .replace(/ê/g, "e")
+      .replace(/ë/g, "e")
+      .replace(/É/g, "E")
+      .replace(/È/g, "E")
+      .replace(/Ê/g, "E")
+      .replace(/Ë/g, "E")
+      .replace(/à/g, "a")
+      .replace(/À/g, "A");
+
   };
 
   const contextValue: CityDataContextType = {
