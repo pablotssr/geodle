@@ -1,5 +1,5 @@
 "use client";
-import MenuPage from "./components/Menu/Index";
+import MenuPage from "./components/Menu/Menu";
 
 export default function Page() {
 	return (

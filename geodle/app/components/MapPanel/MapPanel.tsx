@@ -20,7 +20,7 @@ import Loader from "../Layout/Loader";
 import React, { useState, useRef, useEffect } from "react";
 
 const MapComponent = dynamic<MyMapProps>(
-    () => import("../Map/Index").then((mod) => mod.Map),
+    () => import("../Map/Map").then((mod) => mod.Map),
     {
         ssr: false,
         loading: () => <Loader />,

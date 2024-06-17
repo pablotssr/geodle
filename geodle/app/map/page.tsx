@@ -6,7 +6,7 @@ import { useCityData } from '../context/CityDataContext';
 import Loader from '../components/Layout/Loader';
 import { DEBUG } from '../lib/definitions';
 
-const MapPanel = dynamic(() => import('../components/MapPanel/Index'), { ssr: false });
+const MapPanel = dynamic(() => import('../components/MapPanel/MapPanel'), { ssr: false });
 
 const Map = () => {
   const { randomCity } = useCityData();
