@@ -105,7 +105,7 @@ export interface CityDataProviderProps {
 	children: ReactNode;
 }
 
-export interface IndiceProps {
+export interface HintsProps {
 	randomCity: City;
 	nbTries: number;
 	gamemode: string;

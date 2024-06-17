@@ -18,7 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 import dynamic from "next/dynamic";
 import Loader from "../Layout/Loader";
 import React, { useState, useRef, useEffect } from "react";
-import Indice from "../Indice/Hints";
+import Hints from "../Hints/Hints";
 
 const MapComponent = dynamic<MyMapProps>(
   () => import("../Map/Map").then((mod) => mod.Map),
@@ -199,7 +199,7 @@ const MapPanel: React.FC = () => {
             Trials: {nbTries}
           </div>
 
-          <Indice randomCity={randomCity} nbTries={nbTries} gamemode="map"/>
+          <Hints randomCity={randomCity} nbTries={nbTries} gamemode="map"/>
         </div>
       )}
 

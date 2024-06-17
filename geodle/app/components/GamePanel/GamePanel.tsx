@@ -12,7 +12,7 @@ import Key from "../Key/Key";
 import Keyboard from "../Keyboard/Keyboard";
 import GameResultModal from "../Modal/GameResultModal";
 import { useCityData } from "@/app/context/CityDataContext";
-import Indice from "../Indice/Hints";
+import Hints from "../Hints/Hints";
 
 export default function GamePanel({ city }: GamePanelProps) {
     const { generateRandomCity } = useCityData();
@@ -144,7 +144,7 @@ export default function GamePanel({ city }: GamePanelProps) {
                         </div>
                     ))}
                 </div>
-                <Indice
+                <Hints
                     randomCity={city}
                     nbTries={currentRowIndex}
                     gamemode="word"
