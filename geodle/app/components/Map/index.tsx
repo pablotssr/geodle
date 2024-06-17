@@ -42,20 +42,35 @@ const Map: React.FC<MyMapProps> = ({
 	markers,
 }) => {
 	const [tileLayerUrl, setTileLayerUrl] = useState<string>(
-		"https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png"
+		"https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
 	);
 
 	useEffect(() => {
-		// Detect system theme
-		const prefersDarkMode = window.matchMedia(
-			"(prefers-color-scheme: dark)"
-		).matches;
-		// Select tile layer URL based on system theme
-		const tileLayerUrl = prefersDarkMode
+		// Read the stored theme from localStorage
+		const storedTheme = localStorage.getItem('theme');
+		// Select tile layer URL based on stored theme
+		const tileLayerUrl = storedTheme === 'dark'
 			? "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
-			: "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png";
+			: "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png";
 
 		setTileLayerUrl(tileLayerUrl);
+
+		// Function to update tileLayerUrl based on the current theme
+		const updateTileLayerUrl = () => {
+			const currentTheme = document.documentElement.getAttribute('data-theme');
+			const newTileLayerUrl = currentTheme === 'dark'
+				? "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
+				: "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png";
+			setTileLayerUrl(newTileLayerUrl);
+		};
+
+		// Observe changes to the data-theme attribute
+		const observer = new MutationObserver(updateTileLayerUrl);
+		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+		return () => {
+			observer.disconnect();
+		};
 	}, []);
 
 	return (
@@ -69,13 +84,11 @@ const Map: React.FC<MyMapProps> = ({
 			maxBounds={franceBounds}
 			maxBoundsViscosity={1.0}
 		>
-			<TileLayer
-				url={tileLayerUrl}
-			/>
+			<TileLayer url={tileLayerUrl} />
 			{markers.map((marker, index) => (
 				<Marker key={index} position={marker.position} icon={marker.icon}>
 					<Popup>
-						{<div className="text-center font-bold">{marker.nom_commune}</div>}
+						<div className="text-center font-bold">{marker.nom_commune}</div>
 					</Popup>
 				</Marker>
 			))}
