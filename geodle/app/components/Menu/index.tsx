@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function MenuPage() {
     return (
@@ -12,10 +13,12 @@ export default function MenuPage() {
                 <Link className="" href="/word">
                     <div className="card card-compact w-96 bg-base-100 shadow-xl">
                         <figure>
-                            <img
-                            className="h-48"
+                            <Image
+                                className="h-48"
                                 src="https://www.thetimes.com/imageserver/image/%2Fmethode%2Ftimes%2Fprod%2Fweb%2Fbin%2F27471bb0-730a-11ec-89e9-22d3d9c31ba2.jpg"
                                 alt="Wordle Gamemode"
+                                width={500}
+                                height={300}
                             />
                         </figure>
                         <div className="card-body">
@@ -31,10 +34,12 @@ export default function MenuPage() {
                 <Link className="" href="/map">
                     <div className="card card-compact w-96 bg-base-100 shadow-xl">
                         <figure>
-                            <img
+                            <Image
                                 src="https://cdn.rohde-schwarz.com/pws/_tech/images/map-placeholder.png"
                                 alt="Map Gamemode"
                                 className="h-48"
+                                width={500}
+                                height={300}
                             />
                         </figure>
                         <div className="card-body">
