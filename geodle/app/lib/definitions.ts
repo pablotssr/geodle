@@ -90,9 +90,7 @@ export interface GamePanelProps {
 	city: City;
 }
 
-export interface MapPanelProps {
-	city: City;
-}
+
 
 export interface CityDataContextType {
 	randomCity: City | null;

@@ -12,12 +12,7 @@ export default function MenuPage() {
       >
         Word the city 
       </Link>
-      <Link
-        className="btn btn-secondary btn-lg text-white w-full"
-        href="/map"
-      >
-        Map the city
-      </Link>
+      
     </div>
   );
 }
