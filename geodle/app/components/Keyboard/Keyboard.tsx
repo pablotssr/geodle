@@ -1,6 +1,6 @@
 import { Row } from "@/app/lib/definitions";
 import { useEffect, useMemo } from "react";
-import Key from "../Key/Index";
+import Key from "../Key/Key";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
