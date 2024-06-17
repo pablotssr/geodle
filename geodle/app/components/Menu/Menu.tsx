@@ -7,7 +7,7 @@ export default function MenuPage() {
     return (
         <div className="p-6 space-y-4 flex gap-2 flex-col">
             <h2 className="text-2xl text-center font-bold">
-                Choose your game mode
+                Choose your gamemode
             </h2>
             <div className="flex flew-row gap-8">
                 <Link className="" href="/word">

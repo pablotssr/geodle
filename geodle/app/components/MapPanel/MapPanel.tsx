@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dynamic from "next/dynamic";
-import Loader from "../Layout/Layout";
+import Loader from "../Layout/Loader";
 import React, { useState, useRef, useEffect } from "react";
 
 const MapComponent = dynamic<MyMapProps>(
@@ -188,7 +188,7 @@ const MapPanel: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center flex-1 justify-center">
             <h2 className="text-xl">Guess the City</h2>
             {randomCity && randomCity.additionalData && (
                 <MapComponent
