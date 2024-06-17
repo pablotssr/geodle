@@ -127,7 +127,7 @@ export default function GamePanel({ city }: GamePanelProps) {
 
     return (
         <>
-            <div className="flex justify-center items-center h-full flex-col space-y-16">
+            <div className="flex justify-center items-center h-full flex-col gap-4">
                 <div className="space-y-2">
                     {rows.map((play, index) => (
                         <div key={index} className="flex space-x-2">

@@ -60,7 +60,7 @@ export const Map: React.FC<MyMapProps> = ({ position = defaultPosition, zoom = d
 
   return (
     <MapContainer
-      className="mt-9 rounded"
+      className="rounded"
       center={position}
       zoom={zoom}
       maxZoom={8}

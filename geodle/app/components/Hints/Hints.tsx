@@ -8,8 +8,8 @@ const Hints = ({ randomCity, nbTries, gamemode }: HintsProps) => {
     };
 
     return (
-        <div className="flex items-center gap-4 flex-col">
-            <h4 className="font-bold text-lg">Hint :</h4>
+        <div className="flex items-center gap-2 flex-col">
+            <h4 className="font-bold text-lg">Hints</h4>
             <div className="flex flex-row gap-2">
                 <button
                     className="btn btn-neutral"
@@ -44,7 +44,7 @@ const Hints = ({ randomCity, nbTries, gamemode }: HintsProps) => {
                     Zip Code
                 </button>
             </div>
-            {hint && hint !== null && <span>{hint}</span>}
+            {hint && hint !== null && <span className="capitalize">{hint}</span>}
         </div>
     );
 };

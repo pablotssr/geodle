@@ -15,7 +15,7 @@ const Map = () => {
     <div className="flex flex-col justify-center items-center">
       <MapPanel />
       {DEBUG ? (
-        <h4 className="my-4 text-xl text-center font-bold dark:text-slate">
+        <h4 className="my-4 text-xl text-center font-bold text-base-content">
           {randomCity.nom_commune}
         </h4>
       ) : (

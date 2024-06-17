@@ -24,7 +24,8 @@
     "react-leaflet": "^4.2.1",
     "react-toastify": "^10.0.5",
     "sweetalert2": "^11.11.0",
-    "sweetalert2-react-content": "^5.0.7"
+    "sweetalert2-react-content": "^5.0.7",
+    "theme-change": "^2.5.0"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.12",
