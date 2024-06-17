@@ -185,8 +185,8 @@ export default function MapPanel() {
 				/>
 			)}
 			{randomCity && randomCity.additionalData && (
-				<div>
-					<div className="my-2">Nombre d'essais : {nbTries}</div>
+				<div className="flex flex-col gap-4">
+					<div className="my-2 text-center font-semibold">Trials: {nbTries}</div>
 					<div className="flex items-center gap-2">
 						<button
 							className="btn btn-neutral"
@@ -196,7 +196,7 @@ export default function MapPanel() {
 								handleIndiceClick(randomCity.additionalData.region_name)
 							}
 						>
-							Région
+							Region
 						</button>
 						<button
 							className="btn btn-neutral"
@@ -206,7 +206,7 @@ export default function MapPanel() {
 								handleIndiceClick(randomCity.additionalData.department_name)
 							}
 						>
-							Département
+							Department
 						</button>
 						<button
 							className="btn btn-neutral"
@@ -216,7 +216,7 @@ export default function MapPanel() {
 								handleIndiceClick(randomCity.additionalData.zip_code)
 							}
 						>
-							Code postal
+							Zip Code
 						</button>
 					</div>
 				</div>
