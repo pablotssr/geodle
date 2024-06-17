@@ -6,3 +6,16 @@
     @apply h-[50vh];
     @apply w-[50vh];
 }
+
+.leaflet-control-attribution{
+    display: none;
+}
+
+.suggestion{
+    @apply cursor-pointer;
+    @apply uppercase;
+}
+
+.suggestion:hover{
+    @apply bg-base-300;
+}
