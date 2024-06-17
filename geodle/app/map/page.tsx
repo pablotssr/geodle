@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { useCityData } from '../context/CityDataContext';
-import Loader from '../components/Layout/Loader';
+import Loader from '../components/Layout/Layout2';
 import { DEBUG } from '../lib/definitions';
 
 const MapPanel = dynamic(() => import('../components/MapPanel/MapPanel'), { ssr: false });

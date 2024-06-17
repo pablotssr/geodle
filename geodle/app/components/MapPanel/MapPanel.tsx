@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dynamic from "next/dynamic";
-import Loader from "../Layout/Loader";
+import Loader from "../Layout/Layout2";
 import React, { useState, useRef, useEffect } from "react";
 
 const MapComponent = dynamic<MyMapProps>(
