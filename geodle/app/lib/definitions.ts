@@ -104,3 +104,9 @@ export interface CityDataContextType {
 export interface CityDataProviderProps {
 	children: ReactNode;
 }
+
+export interface IndiceProps {
+	randomCity: City;
+	nbTries: number;
+	gamemode: string;
+}

@@ -18,6 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 import dynamic from "next/dynamic";
 import Loader from "../Layout/Loader";
 import React, { useState, useRef, useEffect } from "react";
+import Indice from "../Indice/Hints";
 
 const MapComponent = dynamic<MyMapProps>(
   () => import("../Map/Map").then((mod) => mod.Map),
@@ -32,7 +33,6 @@ const MapPanel: React.FC = () => {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
   const [nbTries, setNbTries] = useState<number>(0);
-  const [indice, setIndice] = useState<string | null>(null);
   const [markers, setMarkers] = useState<Markers[]>([]);
   const [guess, setGuess] = useState<string>("");
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
@@ -44,12 +44,7 @@ const MapPanel: React.FC = () => {
     useState<number>(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
-
   const debouncedGuess = useDebounce(guess, 500);
-
-  const handleIndiceClick = (value: string) => {
-    setIndice(value);
-  };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "ArrowDown") {
@@ -183,7 +178,6 @@ const MapPanel: React.FC = () => {
     setGuess("");
     setMarkers([]);
     setNbTries(0);
-    setIndice(null);
   };
 
   return (
@@ -204,40 +198,9 @@ const MapPanel: React.FC = () => {
           <div className="my-2 text-center font-semibold">
             Trials: {nbTries}
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              className="btn btn-neutral"
-              disabled={nbTries < 3}
-              onClick={() =>
-                randomCity.additionalData &&
-                handleIndiceClick(randomCity.additionalData.region_name)
-              }>
-              Region
-            </button>
-            <button
-              className="btn btn-neutral"
-              disabled={nbTries < 5}
-              onClick={() =>
-                randomCity.additionalData &&
-                handleIndiceClick(randomCity.additionalData.department_name)
-              }>
-              Department
-            </button>
-            <button
-              className="btn btn-neutral"
-              disabled={nbTries < 8}
-              onClick={() =>
-                randomCity.additionalData &&
-                handleIndiceClick(randomCity.additionalData.zip_code)
-              }>
-              Zip Code
-            </button>
-          </div>
-        </div>
-      )}
 
-      {indice && indice !== null && (
-        <div className="mt-4">Indice : {indice}</div>
+          <Indice randomCity={randomCity} nbTries={nbTries} gamemode="map"/>
+        </div>
       )}
 
       {randomCity && (
