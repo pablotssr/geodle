@@ -50,17 +50,17 @@ const Leaderboard = () => {
                                 <td>{user.nomville}</td>
                                 <td className="flex justify-center">
                                     {user.essais <= 3 && (
-                                        <div className="rounded w-fit px-2 bg-green-300">
+                                        <div className="rounded w-fit px-2 dark:text-black bg-green-300">
                                             {user.essais}
                                         </div>
                                     )}
                                     {user.essais > 3 && user.essais <= 5 && (
-                                        <div className="rounded w-fit px-2 bg-orange-300">
+                                        <div className="rounded w-fit px-2 dark:text-black bg-orange-300">
                                             {user.essais}
                                         </div>
                                     )}
                                     {user.essais > 5 && (
-                                        <div className="text-center rounded w-fit px-2 bg-red-300">
+                                        <div className="text-center dark:text-black rounded w-fit px-2 bg-red-300">
                                             {user.essais}
                                         </div>
                                     )}
