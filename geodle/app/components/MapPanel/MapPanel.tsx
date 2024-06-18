@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Markers, GameStates, MyMapProps } from "../../lib/definitions";
 import { useSearchParams } from "next/navigation";
 
@@ -267,7 +267,12 @@ const MapPanel: React.FC = () => {
                 </div>
             )}
 
-            <GameResultModal gameState={gameState} essais={nbTries} city={randomCity!} resetGame={handleReset} />
+            <GameResultModal
+                gameState={gameState}
+                essais={nbTries}
+                city={randomCity!}
+                resetGame={handleReset}
+            />
         </div>
     );
 };

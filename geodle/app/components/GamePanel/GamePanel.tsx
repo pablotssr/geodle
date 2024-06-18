@@ -14,15 +14,15 @@ import { useCityData } from "@/app/context/CityDataContext";
 import Hints from "../Hints/Hints";
 
 export default function GamePanel({ city }: GamePanelProps) {
-  const { generateRandomCity } = useCityData();
-  const [rows, setRows] = useState<Row[]>([]);
-  const [currentRowIndex, setCurrentRowIndex] = useState(0);
-  const [text, setText] = useState<string>("");
-  const [nbTries, setNbTries] = useState<number>(0);
-  const [solution, setSolution] = useState<string>(city.nom_commune);
-  const [gameState, setGameState] =
-    useState<keyof typeof GameStates>("playing");
-  const nbEssais = 5;
+    const { generateRandomCity } = useCityData();
+    const [rows, setRows] = useState<Row[]>([]);
+    const [currentRowIndex, setCurrentRowIndex] = useState(0);
+    const [text, setText] = useState<string>("");
+    const [nbTries, setNbTries] = useState<number>(0);
+    const [solution, setSolution] = useState<string>(city.nom_commune);
+    const [gameState, setGameState] =
+        useState<keyof typeof GameStates>("playing");
+    const nbEssais = 5;
 
     useEffect(() => {
         initializeGame(city);
@@ -67,16 +67,21 @@ export default function GamePanel({ city }: GamePanelProps) {
     };
 
     const deleteChar = () => {
-        const newText = text.slice(0, -1);
-        setText(newText);
+        if (gameState === "playing") {
+            const newText = text.slice(0, -1);
+            setText(newText);
 
-        setRows((prevRows) => {
-            const newRows = [...prevRows];
-            const newCurrentRow = [...newRows[currentRowIndex]];
-            newCurrentRow[newText.length] = { value: "", status: "guessing" };
-            newRows[currentRowIndex] = newCurrentRow;
-            return newRows;
-        });
+            setRows((prevRows) => {
+                const newRows = [...prevRows];
+                const newCurrentRow = [...newRows[currentRowIndex]];
+                newCurrentRow[newText.length] = {
+                    value: "",
+                    status: "guessing",
+                };
+                newRows[currentRowIndex] = newCurrentRow;
+                return newRows;
+            });
+        }
     };
 
     const handleSubmit = () => {
@@ -93,22 +98,20 @@ export default function GamePanel({ city }: GamePanelProps) {
 
         getStatuses();
         if (text.toUpperCase() === solution.toUpperCase()) {
-          setGameState("win");
-          return;
+            setGameState("win");
+            return;
         }
         if (
-          currentRowIndex === nbEssais - 1 &&
-          text.toUpperCase() !== solution.toUpperCase()
+            currentRowIndex === nbEssais - 1 &&
+            text.toUpperCase() !== solution.toUpperCase()
         ) {
-          setGameState("lose");
-          return;
+            setGameState("lose");
+            return;
         }
         setText("");
         setCurrentRowIndex((prev) => prev + 1);
         setNbTries((prev) => prev + 1);
-      };
-
-    
+    };
 
     const getStatuses = () => {
         const currentRow = [...rows[currentRowIndex]];
@@ -184,7 +187,7 @@ export default function GamePanel({ city }: GamePanelProps) {
                     onReset={handleReset}
                 />
             </div>
-            
+
             <GameResultModal
                 city={city}
                 essais={nbTries + 1}
