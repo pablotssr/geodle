@@ -1,9 +1,26 @@
 "use client";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { getLatestUsers } from "@/app/lib/serverRequest";
 
 export default function MenuPage() {
+    type GameType = "Wordle" | "Map";
+    const [latestUsers, setLatestUsers] = useState([]);
+
+    useEffect(() => {
+        async function fetchLatestUsers() {
+            try {
+                const response = await getLatestUsers();
+                setLatestUsers(response.rows); // Mettre à jour l'état avec les données reçues
+            } catch (error) {
+                console.error('Erreur lors de la récupération des utilisateurs:', error);
+            }
+        }
+
+        fetchLatestUsers();
+    }, []);
+
     return (
         <div className="p-6 space-y-4 flex gap-2 flex-col">
             <h2 className="text-2xl text-center font-bold">
@@ -59,6 +76,18 @@ export default function MenuPage() {
                     </div>
                 </Link>
             </div>
+        <div>{/* Mapping through latestUsers to display each user */}
+                {latestUsers.map(user => (
+                        <div className="card-body">
+                        {/* Condition pour afficher le type de jeu */}
+                        {user.typejeu === "map" && (
+                            <p>Map : {user.username} a trouvé {user.nomville} en {user.essais} essais !</p>
+                        )}
+                        {user.typejeu === "word" && (
+                            <p>Word : {user.username} a trouvé {user.nomville} en {user.essais} essais !</p>
+                        )}
+                    </div>
+                ))}</div>
         </div>
     );
 }

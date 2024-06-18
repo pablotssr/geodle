@@ -6,11 +6,14 @@ export default function GameResultModal({
   city,
   gameState,
   resetGame,
+  essais,
 }: {
   city: City
   gameState: keyof typeof GameStates;
   resetGame: () => void;
+  essais: number;
 }) {
+
   const [isOpen, setIsOpen] = useState(false);
   const playAgainButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -25,6 +28,7 @@ export default function GameResultModal({
       playAgainButtonRef.current.blur();
     }
   }, [isOpen, gameState]);
+
 
   return (
     <>
@@ -48,7 +52,7 @@ export default function GameResultModal({
               ✕
             </label>
           </div>
-          <WinModal city={city} gameState={gameState}/>
+          <WinModal city={city} gameState={gameState} essais={essais}/>
           <div className="modal-footer">
             <div className="flex items-center justify-end">
               <button
