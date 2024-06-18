@@ -52,6 +52,7 @@ export default function GameResultModal({
               ✕
             </label>
           </div>
+          
           <WinModal city={city} gameState={gameState} essais={essais}/>
 
           <div className="modal-footer">
