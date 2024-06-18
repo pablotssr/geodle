@@ -1,20 +1,22 @@
 "use client";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { getLatestUsers } from "@/app/lib/serverRequest";
 
 export default function MenuPage() {
-    type GameType = "Wordle" | "Map";
     const [latestUsers, setLatestUsers] = useState([]);
 
     useEffect(() => {
         async function fetchLatestUsers() {
             try {
                 const response = await getLatestUsers();
-                setLatestUsers(response.rows); // Mettre à jour l'état avec les données reçues
+                setLatestUsers(response.rows);
             } catch (error) {
-                console.error('Erreur lors de la récupération des utilisateurs:', error);
+                console.error(
+                    "Erreur lors de la récupération des utilisateurs:",
+                    error
+                );
             }
         }
 
@@ -76,18 +78,24 @@ export default function MenuPage() {
                     </div>
                 </Link>
             </div>
-        <div>{/* Mapping through latestUsers to display each user */}
-                {latestUsers.map(user => (
-                        <div className="card-body">
-                        {/* Condition pour afficher le type de jeu */}
+            <div>
+                {latestUsers.map((user) => (
+                    <div key={user.id} className="card-body">
                         {user.typejeu === "map" && (
-                            <p>Map : {user.username} a trouvé {user.nomville} en {user.essais} essais !</p>
+                            <p>
+                                Map : {user.username} a trouvé {user.nomville}{" "}
+                                en {user.essais} essais !
+                            </p>
                         )}
-                        {user.typejeu === "word" && (
-                            <p>Word : {user.username} a trouvé {user.nomville} en {user.essais} essais !</p>
+                        {user.typejeu === "wordle" && (
+                            <p>
+                                Word : {user.username} a trouvé {user.nomville}{" "}
+                                en {user.essais} essais !
+                            </p>
                         )}
                     </div>
-                ))}</div>
+                ))}
+            </div>
         </div>
     );
 }
