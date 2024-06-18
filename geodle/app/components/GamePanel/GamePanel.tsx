@@ -187,7 +187,7 @@ export default function GamePanel({ city }: GamePanelProps) {
             
             <GameResultModal
                 city={city}
-                essais={nbTries}
+                essais={nbTries + 1}
                 gameState={gameState}
                 resetGame={() => handleReset()}
             />
