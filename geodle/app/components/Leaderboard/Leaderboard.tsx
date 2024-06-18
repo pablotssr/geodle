@@ -12,7 +12,10 @@ const Leaderboard = () => {
                 if (response && response.rows) {
                     setLatestUsers(response.rows);
                 } else {
-                    console.error("Empty response or missing 'rows' property:", response);
+                    console.error(
+                        "Empty response or missing 'rows' property:",
+                        response
+                    );
                 }
             } catch (error) {
                 console.error("Error fetching users:", error);
@@ -45,7 +48,23 @@ const Leaderboard = () => {
                                     {user.typejeu === "map" ? "Map" : "Wordle"}
                                 </td>
                                 <td>{user.nomville}</td>
-                                <td>{user.essais}</td>
+                                <td className="flex justify-center">
+                                    {user.essais <= 3 && (
+                                        <div className="rounded w-fit px-2 bg-green-300">
+                                            {user.essais}
+                                        </div>
+                                    )}
+                                    {user.essais > 3 && user.essais <= 5 && (
+                                        <div className="rounded w-fit px-2 bg-orange-300">
+                                            {user.essais}
+                                        </div>
+                                    )}
+                                    {user.essais > 5 && (
+                                        <div className="text-center rounded w-fit px-2 bg-red-300">
+                                            {user.essais}
+                                        </div>
+                                    )}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
