@@ -41,6 +41,7 @@ export default function GamePanel({ city }: GamePanelProps) {
         setCurrentRowIndex(0);
         setGameState("playing");
         setText("");
+        setNbTries(0);
     };
 
     const handleLetterClick = (letter: string) => {
