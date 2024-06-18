@@ -1,10 +1,13 @@
-import { GameStates } from "@/app/lib/definitions";
+import { City, GameStates } from "@/app/lib/definitions";
 import { useState, useEffect, useRef } from "react";
+import WinModal from "./WinModal";
 
 export default function GameResultModal({
+  city,
   gameState,
   resetGame,
 }: {
+  city: City
   gameState: keyof typeof GameStates;
   resetGame: () => void;
 }) {
@@ -45,10 +48,7 @@ export default function GameResultModal({
               ✕
             </label>
           </div>
-          <div className="modal-body mt-4">
-            {gameState === "lose" && <p>Better try again!</p>}
-            {gameState === "win" && <p>Congratulations on your win!</p>}
-          </div>
+          <WinModal city={city} gameState={gameState}/>
           <div className="modal-footer">
             <div className="flex items-center justify-end">
               <button
