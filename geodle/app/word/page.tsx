@@ -1,6 +1,6 @@
 "use client";
 
-import Loader from "../components/Layout/Layout";
+import Loader from "../components/Layout/Loader";
 import GamePanel from "../components/GamePanel/GamePanel";
 import { useCityData } from "../context/CityDataContext";
 import { DEBUG } from "../lib/definitions";
@@ -9,7 +9,7 @@ export default function Jeu() {
 	const { randomCity } = useCityData();
 
 	return (
-		<div className="flex flex-col items-center">
+		<div className="flex flex-col items-center flex-1 justify-center">
 			{randomCity ? (
 				<div>
 					<h2 className="text-3xl text-center font-bold mb-4 dark:text-slate">
