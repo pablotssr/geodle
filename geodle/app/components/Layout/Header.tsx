@@ -11,7 +11,7 @@ const Header = () => {
                 Geodle
             </Link>
             <div className="flex flex-row gap-2">
-                <LeaderboardModal/>
+                {/* <LeaderboardModal/> */}
                 <TutorialModal/>
                 <ThemeChanger/>
             </div>
