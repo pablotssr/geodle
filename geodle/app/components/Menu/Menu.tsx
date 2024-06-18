@@ -63,7 +63,7 @@ export default function MenuPage() {
             </div>
             <div className="flex flex-col gap-4">
                 <h2 className="text-2xl text-center font-bold text-base-content">
-                    Leaderboard
+                    Latest scores
                 </h2>
                 <Leaderboard />
             </div>

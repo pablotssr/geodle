@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import React from "react";
+import { useEffect } from "react";
 import { useCityData } from "../context/CityDataContext";
 import Loader from "../components/Layout/Loader";
 import { DEBUG } from "../lib/definitions";
@@ -11,7 +11,11 @@ const MapPanel = dynamic(() => import("../components/MapPanel/MapPanel"), {
 });
 
 const Map = () => {
-    const { randomCity } = useCityData();
+    const { randomCity, generateRandomCity } = useCityData();
+
+    useEffect(() =>{
+		generateRandomCity();
+	}, [])
 
     return randomCity ? (
         <div className="flex flex-col justify-center items-center">

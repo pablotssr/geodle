@@ -20,7 +20,7 @@ export async function registerUser(username: string) {
 export async function getLatestUsers() {
     try {
         const result = await sql`
-        SELECT * FROM score INNER JOIN users ON users.id = score.userId WHERE score.date >= NOW() - INTERVAL '12 HOURS'
+        SELECT * FROM score INNER JOIN users ON users.id = score.userId WHERE score.date >= NOW() - INTERVAL '12 HOURS ' ORDER BY score.date DESC
       `;
         return result;
     } catch (error) {

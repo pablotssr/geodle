@@ -63,6 +63,7 @@ const WinModal: React.FC<WinModalProps> = ({ city, gameState, essais }) => {
                                         className="grow"
                                         id="username"
                                         placeholder="Username"
+                                        autoComplete="false"
                                         value={username}
                                         onChange={(e) =>
                                             setUsername(e.target.value)

@@ -28,7 +28,6 @@ const Leaderboard = () => {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th>Ranking</th>
                             <th>Username</th>
                             <th>Gamemode</th>
                             <th>City</th>
@@ -41,7 +40,6 @@ const Leaderboard = () => {
                                 key={user.id}
                                 className={index % 2 === 0 ? "bg-base-200" : ""}
                             >
-                                <th>{index + 1}</th>
                                 <td>{user.username}</td>
                                 <td>
                                     {user.typejeu === "map" ? "Map" : "Wordle"}

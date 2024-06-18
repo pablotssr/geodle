@@ -4,9 +4,14 @@ import Loader from "../components/Layout/Loader";
 import GamePanel from "../components/GamePanel/GamePanel";
 import { useCityData } from "../context/CityDataContext";
 import { DEBUG } from "../lib/definitions";
+import { useEffect } from "react";
 
 export default function Jeu() {
-	const { randomCity } = useCityData();
+	const { randomCity, generateRandomCity } = useCityData();
+
+	useEffect(() =>{
+		generateRandomCity();
+	}, [])
 
 	return (
 		<div className="flex flex-col items-center flex-1 justify-center">
