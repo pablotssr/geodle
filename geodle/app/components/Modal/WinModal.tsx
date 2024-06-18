@@ -29,7 +29,6 @@ const WinModal: React.FC<WinModalProps> = ({ city, gameState, essais }) => {
         } else {
             console.error("Registration failed:", registrationResult.message);
             toast.error("Error when sending your score.");
-
         }
     };
 

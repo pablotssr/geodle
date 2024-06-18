@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import { getLatestUsers } from "@/app/lib/serverRequest";
+import { QueryResultRow } from "@vercel/postgres";
 
 const Leaderboard = () => {
-    const [latestUsers, setLatestUsers] = useState([]);
+    const [latestUsers, setLatestUsers] = useState<QueryResultRow[]>([]);
 
     useEffect(() => {
         async function fetchLatestUsers() {
             try {
                 const response = await getLatestUsers();
-                setLatestUsers(response.rows);
+                if (response && response.rows) {
+                    setLatestUsers(response.rows);
+                } else {
+                    console.error("Empty response or missing 'rows' property:", response);
+                }
             } catch (error) {
-                console.error(
-                    "Error fetching users.",
-                    error
-                );
+                console.error("Error fetching users:", error);
             }
         }
 
