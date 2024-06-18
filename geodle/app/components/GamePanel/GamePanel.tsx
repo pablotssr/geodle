@@ -18,6 +18,7 @@ export default function GamePanel({ city }: GamePanelProps) {
   const [rows, setRows] = useState<Row[]>([]);
   const [currentRowIndex, setCurrentRowIndex] = useState(0);
   const [text, setText] = useState<string>("");
+  const [nbTries, setNbTries] = useState<number>(0);
   const [solution, setSolution] = useState<string>(city.nom_commune);
   const [gameState, setGameState] =
     useState<keyof typeof GameStates>("playing");
@@ -103,6 +104,7 @@ export default function GamePanel({ city }: GamePanelProps) {
     }
     setText("");
     setCurrentRowIndex((prev) => prev + 1);
+    setNbTries((prev) => prev + 1);
   };
 
   const getStatuses = () => {
@@ -149,7 +151,7 @@ export default function GamePanel({ city }: GamePanelProps) {
           onReset={handleReset}
         />
       </div>
-      <GameResultModal gameState={gameState} resetGame={() => handleReset()} />
+      <GameResultModal gameState={gameState} nomville={city.nom_commune} essais={nbTries} resetGame={() => handleReset()} />
     </>
   );
 }

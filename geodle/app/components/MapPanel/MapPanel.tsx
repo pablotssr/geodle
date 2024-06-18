@@ -1,6 +1,7 @@
 'use client'
 import { Markers, GameStates, MyMapProps } from "../../lib/definitions";
 import { useSearchParams } from "next/navigation";
+
 import {
     iconRed,
     iconOrange,
@@ -45,6 +46,8 @@ const MapPanel: React.FC = () => {
     const inputRef = useRef<HTMLInputElement>(null);
     const suggestionsRef = useRef<HTMLDivElement>(null);
 
+
+    
     const debouncedGuess = useDebounce(guess, 500);
 
     const handleIndiceClick = (value: string) => {
@@ -81,69 +84,72 @@ const MapPanel: React.FC = () => {
         }
     };
 
-    const handleGuess = () => {
-        if (gameState === "win")
-            toast.warn(
-                "You already won! Reset the game by generating a new city."
-            );
+    
 
-        if (gameState === "playing")
-            setNbTries((prevAttempts) => prevAttempts + 1);
+    
+const handleGuess = () => {
+    if (gameState === "win")
+        toast.warn(
+            "You already won! Reset the game by generating a new city."
+        );
 
-        const isCityMatched =
-            jsonData &&
-            jsonData.some(
-                (city) => city.nom_commune.toLowerCase() === guess.toLowerCase()
-            );
+    if (gameState === "playing")
+        setNbTries((prevAttempts) => prevAttempts + 1);
 
-        if (isCityMatched) {
-            const matchedCity = jsonData!.find(
-                (city) => city.nom_commune.toLowerCase() === guess.toLowerCase()
-            );
+    const isCityMatched =
+        jsonData &&
+        jsonData.some(
+            (city) => city.nom_commune.toLowerCase() === guess.toLowerCase()
+        );
 
-            const matchedCityPosition: [number, number] = [
-                parseFloat(matchedCity!.geo_point_2d.lat),
-                parseFloat(matchedCity!.geo_point_2d.lon),
-            ];
+    if (isCityMatched) {
+        const matchedCity = jsonData!.find(
+            (city) => city.nom_commune.toLowerCase() === guess.toLowerCase()
+        );
 
-            const distance = haversineDistance(
-                randomCity!.geo_point_2d,
-                matchedCityPosition
-            );
-            let icon = iconGreen;
+        const matchedCityPosition: [number, number] = [
+            parseFloat(matchedCity!.geo_point_2d.lat),
+            parseFloat(matchedCity!.geo_point_2d.lon),
+        ];
 
-            if (distance === 0) {
-                icon = iconGreen;
-            } else if (distance < 100) {
-                icon = iconYellow;
-            } else if (distance < 300) {
-                icon = iconOrange;
-            } else {
-                icon = iconRed;
-            }
+        const distance = haversineDistance(
+            randomCity!.geo_point_2d,
+            matchedCityPosition
+        );
+        let icon = iconGreen;
 
-            const newMarker: Markers = {
-                position: matchedCityPosition,
-                nom_commune: matchedCity!.nom_commune,
-                icon: icon,
-            };
-
-            setMarkers((prevMarkers) =>
-                prevMarkers ? [...prevMarkers, newMarker] : [newMarker]
-            );
-            setGuess("");
-        }
-
-        if (
-            randomCity &&
-            guess.toLowerCase() === randomCity.nom_commune.toLowerCase()
-        ) {
-            setIsCorrect(true);
-            setGameState("win");
+        if (distance === 0) {
+            icon = iconGreen;
+        } else if (distance < 100) {
+            icon = iconYellow;
+        } else if (distance < 300) {
+            icon = iconOrange;
         } else {
-            setIsCorrect(false);
+            icon = iconRed;
         }
-    };
+
+        const newMarker: Markers = {
+            position: matchedCityPosition,
+            nom_commune: matchedCity!.nom_commune,
+            icon: icon,
+        };
+
+        setMarkers((prevMarkers) =>
+            prevMarkers ? [...prevMarkers, newMarker] : [newMarker]
+        );
+        setGuess("");
+    }
+
+    if (
+        randomCity &&
+        guess.toLowerCase() === randomCity.nom_commune.toLowerCase()
+    ) {
+        setIsCorrect(true);
+        setGameState("win");
+    } else {
+        setIsCorrect(false);
+    }
+};
 
     const handleGuessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setGuess(event.target.value.toLowerCase());
@@ -185,7 +191,9 @@ const MapPanel: React.FC = () => {
         generateRandomCity();
         setGuess("");
         setMarkers([]);
+        setNbTries(0);
     };
+    
 
     return (
         <div className="flex flex-col items-center">
@@ -306,8 +314,11 @@ const MapPanel: React.FC = () => {
                     )}
                 </div>
             )}
+           
 
-            <GameResultModal gameState={gameState} resetGame={handleReset} />
+
+
+            <GameResultModal gameState={gameState} nomville={randomCity!.nom_commune} essais={nbTries} resetGame={handleReset} />
         </div>
     );
 };
