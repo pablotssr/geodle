@@ -1,7 +1,7 @@
 import { LatLngTuple } from "leaflet";
 import { ReactNode } from "react";
 
-export const DEBUG = true;
+export const DEBUG = false;
 
 export interface City {
 	gid: string;
