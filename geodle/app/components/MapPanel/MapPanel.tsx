@@ -15,10 +15,10 @@ import useDebounce from "../../hooks/useDebounce";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons/faArrowsRotate";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import dynamic from "next/dynamic";
 import Loader from "../Layout/Loader";
 import React, { useState, useRef, useEffect } from "react";
+import Hints from "../Hints/Hints";
 
 const MapComponent = dynamic<MyMapProps>(
     () => import("../Map/Map").then((mod) => mod.Map),
@@ -33,7 +33,6 @@ const MapPanel: React.FC = () => {
     const searchParams = useSearchParams();
     const type = searchParams.get("type");
     const [nbTries, setNbTries] = useState<number>(0);
-    const [indice, setIndice] = useState<string | null>(null);
     const [markers, setMarkers] = useState<Markers[]>([]);
     const [guess, setGuess] = useState<string>("");
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
@@ -45,14 +44,7 @@ const MapPanel: React.FC = () => {
         useState<number>(-1);
     const inputRef = useRef<HTMLInputElement>(null);
     const suggestionsRef = useRef<HTMLDivElement>(null);
-
-
-    
     const debouncedGuess = useDebounce(guess, 500);
-
-    const handleIndiceClick = (value: string) => {
-        setIndice(value);
-    };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "ArrowDown") {
@@ -84,72 +76,69 @@ const MapPanel: React.FC = () => {
         }
     };
 
-    
+    const handleGuess = () => {
+        if (gameState === "win")
+            toast.warn(
+                "You already won! Reset the game by generating a new city."
+            );
 
-    
-const handleGuess = () => {
-    if (gameState === "win")
-        toast.warn(
-            "You already won! Reset the game by generating a new city."
-        );
+        if (gameState === "playing")
+            setNbTries((prevAttempts) => prevAttempts + 1);
 
-    if (gameState === "playing")
-        setNbTries((prevAttempts) => prevAttempts + 1);
+        const isCityMatched =
+            jsonData &&
+            jsonData.some(
+                (city) => city.nom_commune.toLowerCase() === guess.toLowerCase()
+            );
 
-    const isCityMatched =
-        jsonData &&
-        jsonData.some(
-            (city) => city.nom_commune.toLowerCase() === guess.toLowerCase()
-        );
+        if (isCityMatched) {
+            const matchedCity = jsonData!.find(
+                (city) => city.nom_commune.toLowerCase() === guess.toLowerCase()
+            );
 
-    if (isCityMatched) {
-        const matchedCity = jsonData!.find(
-            (city) => city.nom_commune.toLowerCase() === guess.toLowerCase()
-        );
+            const matchedCityPosition: [number, number] = [
+                parseFloat(matchedCity!.geo_point_2d.lat),
+                parseFloat(matchedCity!.geo_point_2d.lon),
+            ];
 
-        const matchedCityPosition: [number, number] = [
-            parseFloat(matchedCity!.geo_point_2d.lat),
-            parseFloat(matchedCity!.geo_point_2d.lon),
-        ];
+            const distance = haversineDistance(
+                randomCity!.geo_point_2d,
+                matchedCityPosition
+            );
+            let icon = iconGreen;
 
-        const distance = haversineDistance(
-            randomCity!.geo_point_2d,
-            matchedCityPosition
-        );
-        let icon = iconGreen;
+            if (distance === 0) {
+                icon = iconGreen;
+            } else if (distance < 100) {
+                icon = iconYellow;
+            } else if (distance < 300) {
+                icon = iconOrange;
+            } else {
+                icon = iconRed;
+            }
 
-        if (distance === 0) {
-            icon = iconGreen;
-        } else if (distance < 100) {
-            icon = iconYellow;
-        } else if (distance < 300) {
-            icon = iconOrange;
-        } else {
-            icon = iconRed;
+            const newMarker: Markers = {
+                position: matchedCityPosition,
+                nom_commune: matchedCity!.nom_commune,
+                icon: icon,
+            };
+
+            setMarkers((prevMarkers) =>
+                prevMarkers ? [...prevMarkers, newMarker] : [newMarker]
+            );
+            setGuess("");
         }
 
-        const newMarker: Markers = {
-            position: matchedCityPosition,
-            nom_commune: matchedCity!.nom_commune,
-            icon: icon,
-        };
-
-        setMarkers((prevMarkers) =>
-            prevMarkers ? [...prevMarkers, newMarker] : [newMarker]
-        );
-        setGuess("");
-    }
-
-    if (
-        randomCity &&
-        guess.toLowerCase() === randomCity.nom_commune.toLowerCase()
-    ) {
-        setIsCorrect(true);
-        setGameState("win");
-    } else {
-        setIsCorrect(false);
-    }
-};
+        if (
+            randomCity &&
+            guess.toLowerCase() === randomCity.nom_commune.toLowerCase()
+        ) {
+            setIsCorrect(true);
+            setGameState("win");
+        } else {
+            setIsCorrect(false);
+        }
+    };
 
     const handleGuessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setGuess(event.target.value.toLowerCase());
@@ -192,12 +181,11 @@ const handleGuess = () => {
         setGuess("");
         setMarkers([]);
         setNbTries(0);
+        toast.info("A new city has been generated!");
     };
-    
 
     return (
-        <div className="flex flex-col items-center">
-            <h2 className="text-xl">Guess the City</h2>
+        <div className="flex flex-col items-center flex-1 justify-center gap-4">
             {randomCity && randomCity.additionalData && (
                 <MapComponent
                     position={[
@@ -213,49 +201,13 @@ const handleGuess = () => {
                     <div className="my-2 text-center font-semibold">
                         Trials: {nbTries}
                     </div>
-                    <div className="flex items-center gap-2">
-                        <button
-                            className="btn btn-neutral"
-                            disabled={nbTries < 3}
-                            onClick={() =>
-                                randomCity.additionalData &&
-                                handleIndiceClick(
-                                    randomCity.additionalData.region_name
-                                )
-                            }
-                        >
-                            Region
-                        </button>
-                        <button
-                            className="btn btn-neutral"
-                            disabled={nbTries < 5}
-                            onClick={() =>
-                                randomCity.additionalData &&
-                                handleIndiceClick(
-                                    randomCity.additionalData.department_name
-                                )
-                            }
-                        >
-                            Department
-                        </button>
-                        <button
-                            className="btn btn-neutral"
-                            disabled={nbTries < 8}
-                            onClick={() =>
-                                randomCity.additionalData &&
-                                handleIndiceClick(
-                                    randomCity.additionalData.zip_code
-                                )
-                            }
-                        >
-                            Zip Code
-                        </button>
-                    </div>
-                </div>
-            )}
 
-            {indice && indice !== null && (
-                <div className="mt-4">Indice : {indice}</div>
+                    <Hints
+                        randomCity={randomCity}
+                        nbTries={nbTries}
+                        gamemode="map"
+                    />
+                </div>
             )}
 
             {randomCity && (
@@ -314,11 +266,8 @@ const handleGuess = () => {
                     )}
                 </div>
             )}
-           
 
-
-
-            <GameResultModal gameState={gameState} nomville={randomCity!.nom_commune} essais={nbTries} resetGame={handleReset} />
+            <GameResultModal gameState={gameState} essais={nbTries} city={randomCity!} resetGame={handleReset} />
         </div>
     );
 };

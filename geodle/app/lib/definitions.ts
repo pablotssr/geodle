@@ -42,6 +42,7 @@ export enum GameStates {
 	"win",
 	"lose",
 }
+
 export enum Statuses {
 	"absent",
 	"present",
@@ -103,4 +104,10 @@ export interface CityDataContextType {
 
 export interface CityDataProviderProps {
 	children: ReactNode;
+}
+
+export interface HintsProps {
+	randomCity: City;
+	nbTries: number;
+	gamemode: string;
 }

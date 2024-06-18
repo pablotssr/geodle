@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
@@ -20,6 +21,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
+            
             <body>
                 <div className="flex flex-col min-h-screen">
                     <main className="flex-1 flex flex-col">
