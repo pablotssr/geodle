@@ -185,7 +185,6 @@ const MapPanel: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center flex-1 justify-center gap-4">
-            <h2 className="text-xl">Guess the City</h2>
             {randomCity && randomCity.additionalData && (
                 <MapComponent
                     position={[

@@ -10,16 +10,19 @@ export default function MenuPage() {
                 Choose your gamemode
             </h2>
             <div className="flex flew-row gap-8">
-                <Link className="" href="/word">
+                <Link className="" href="/wordle">
                     <div className="card card-compact w-96 bg-base-100 shadow-xl">
                         <figure>
-                            <Image
-                                className="h-48"
-                                src="https://www.thetimes.com/imageserver/image/%2Fmethode%2Ftimes%2Fprod%2Fweb%2Fbin%2F27471bb0-730a-11ec-89e9-22d3d9c31ba2.jpg"
-                                alt="Wordle Gamemode"
-                                width={500}
-                                height={300}
-                            />
+                            <div className="w-[400px] h-[189px] relative">
+                                <Image
+                                    src="/wordle.png"
+                                    alt="Wordle Gamemode"
+                                    width={400}
+                                    height={189}
+                                    layout="intrinsic"
+                                    objectFit="cover"
+                                />
+                            </div>
                         </figure>
                         <div className="card-body">
                             <h2 className="card-title">Wordle</h2>
@@ -34,13 +37,16 @@ export default function MenuPage() {
                 <Link className="" href="/map">
                     <div className="card card-compact w-96 bg-base-100 shadow-xl">
                         <figure>
-                            <Image
-                                src="https://cdn.rohde-schwarz.com/pws/_tech/images/map-placeholder.png"
-                                alt="Map Gamemode"
-                                className="h-48"
-                                width={500}
-                                height={300}
-                            />
+                            <div className="w-[400px] h-[189px] relative">
+                                <Image
+                                    src="/map_placeholder.png"
+                                    alt="Map Gamemode"
+                                    width={400}
+                                    height={189}
+                                    layout="intrinsic"
+                                    objectFit="cover"
+                                />
+                            </div>
                         </figure>
                         <div className="card-body">
                             <h2 className="card-title">Map</h2>
