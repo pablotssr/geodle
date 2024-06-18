@@ -67,6 +67,7 @@ const WinModal: React.FC<WinModalProps> = ({
                             <button
                                 className="btn btn-primary"
                                 type="submit"
+                                onClick={handlePlayAgain}
                             >
                                 Play again
                             </button>
