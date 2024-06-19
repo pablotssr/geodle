@@ -168,7 +168,6 @@ const MapPanel: React.FC = () => {
                       .filter((city) => city.startsWith(debouncedGuess))
                 : [];
             setSuggestions(filteredSuggestions);
-            console.log(filteredSuggestions);
             setShowSuggestions(true);
             setSelectedSuggestionIndex(-1);
         } else {

@@ -11,7 +11,6 @@ const Leaderboard = () => {
                 const response = await getLatestUsers();
                 if (response && response.rows) {
                     setLatestUsers(response.rows);
-                    console.log(response.rows);
                 } else {
                     console.error(
                         "Empty response or missing 'rows' property:",
