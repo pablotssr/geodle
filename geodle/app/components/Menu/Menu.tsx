@@ -10,7 +10,7 @@ export default function MenuPage() {
                 <h2 className="text-2xl text-center font-bold">
                     Choose your gamemode
                 </h2>
-                <div className="flex flew-row gap-8">
+                <div className="flex flex-row gap-8">
                     <Link className="" href="/wordle">
                         <div className="card card-compact w-96 bg-base-100 shadow-xl">
                             <figure>
@@ -20,8 +20,7 @@ export default function MenuPage() {
                                         alt="Wordle Gamemode"
                                         width={400}
                                         height={189}
-                                        layout="intrinsic"
-                                        objectFit="cover"
+                                        style={{ objectFit: "cover" }}
                                     />
                                 </div>
                             </figure>
@@ -44,8 +43,7 @@ export default function MenuPage() {
                                         alt="Map Gamemode"
                                         width={400}
                                         height={189}
-                                        layout="intrinsic"
-                                        objectFit="cover"
+                                        style={{ objectFit: "cover" }}
                                     />
                                 </div>
                             </figure>

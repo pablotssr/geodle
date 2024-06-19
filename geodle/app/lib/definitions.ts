@@ -1,7 +1,7 @@
 import { LatLngTuple } from "leaflet";
 import { ReactNode } from "react";
 
-export const DEBUG = false;
+export const DEBUG = true;
 
 export interface City {
 	gid: string;
@@ -100,7 +100,7 @@ export interface CityDataContextType {
 	cityDataMap: Map<string, CityAdditionalData> | null;
 	jsonData: any[];
 	generateRandomCity: () => void;
-}
+	removeAccents: (arg0: string) => string}
 
 export interface CityDataProviderProps {
 	children: ReactNode;

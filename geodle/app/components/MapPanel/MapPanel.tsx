@@ -29,7 +29,8 @@ const MapComponent = dynamic<MyMapProps>(
 );
 
 const MapPanel: React.FC = () => {
-    const { randomCity, jsonData, generateRandomCity } = useCityData();
+    const { randomCity, jsonData, generateRandomCity, removeAccents } =
+        useCityData();
     const searchParams = useSearchParams();
     const type = searchParams.get("type");
     const [nbTries, setNbTries] = useState<number>(0);
@@ -88,12 +89,18 @@ const MapPanel: React.FC = () => {
         const isCityMatched =
             jsonData &&
             jsonData.some(
-                (city) => city.nom_commune.toLowerCase() === guess.toLowerCase()
+                (city) =>
+                    city.nom_commune.toLowerCase() === guess.toLowerCase() ||
+                    removeAccents(city.nom_commune.toLowerCase()) ===
+                        guess.toLowerCase()
             );
 
         if (isCityMatched) {
             const matchedCity = jsonData!.find(
-                (city) => city.nom_commune.toLowerCase() === guess.toLowerCase()
+                (city) =>
+                    city.nom_commune.toLowerCase() === guess.toLowerCase() ||
+                    removeAccents(city.nom_commune.toLowerCase()) ===
+                        guess.toLowerCase()
             );
 
             const matchedCityPosition: [number, number] = [
@@ -130,8 +137,11 @@ const MapPanel: React.FC = () => {
         }
 
         if (
-            randomCity &&
-            guess.toLowerCase() === randomCity.nom_commune.toLowerCase()
+            (randomCity &&
+                guess.toLowerCase() === randomCity.nom_commune.toLowerCase()) ||
+            (randomCity &&
+                removeAccents(randomCity.nom_commune).toLowerCase() ===
+                    removeAccents(guess).toLowerCase())
         ) {
             setIsCorrect(true);
             setGameState("win");
@@ -158,6 +168,7 @@ const MapPanel: React.FC = () => {
                       .filter((city) => city.startsWith(debouncedGuess))
                 : [];
             setSuggestions(filteredSuggestions);
+            console.log(filteredSuggestions);
             setShowSuggestions(true);
             setSelectedSuggestionIndex(-1);
         } else {
@@ -244,7 +255,7 @@ const MapPanel: React.FC = () => {
 
                     {showSuggestions && (
                         <div
-                            className="suggestions-container bg-base-200 border-base-200 border-2 rounded-lg"
+                            className="suggestions-container bg-base-200 border-base-200 border-2 rounded-lg overflow-y-auto max-h-64"
                             ref={suggestionsRef}
                         >
                             {suggestions.map((suggestion, index) => (

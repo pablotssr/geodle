@@ -13,7 +13,7 @@
 
 .suggestion{
     @apply cursor-pointer;
-    @apply uppercase;
+    @apply capitalize;
 }
 
 .suggestion:hover{
