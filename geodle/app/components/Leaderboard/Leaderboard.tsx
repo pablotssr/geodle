@@ -11,6 +11,7 @@ const Leaderboard = () => {
                 const response = await getLatestUsers();
                 if (response && response.rows) {
                     setLatestUsers(response.rows);
+                    console.log(response.rows);
                 } else {
                     console.error(
                         "Empty response or missing 'rows' property:",
@@ -49,20 +50,44 @@ const Leaderboard = () => {
                                 </td>
                                 <td>{user.nomville}</td>
                                 <td className="flex justify-center">
-                                    {user.essais <= 3 && (
-                                        <div className="rounded w-fit px-2 dark:text-black bg-green-300">
-                                            {user.essais}
-                                        </div>
+                                    {user.typejeu === "wordle" && (
+                                        <>
+                                            {user.essais <= 3 && (
+                                                <div className="rounded w-fit px-2 dark:text-black bg-green-300">
+                                                    {user.essais}
+                                                </div>
+                                            )}
+                                            {user.essais === 4 && (
+                                                <div className="rounded w-fit px-2 dark:text-black bg-orange-300">
+                                                    {user.essais}
+                                                </div>
+                                            )}
+                                            {user.essais >= 5 && (
+                                                <div className="text-center dark:text-black rounded w-fit px-2 bg-red-300">
+                                                    {user.essais}
+                                                </div>
+                                            )}
+                                        </>
                                     )}
-                                    {user.essais > 3 && user.essais <= 5 && (
-                                        <div className="rounded w-fit px-2 dark:text-black bg-orange-300">
-                                            {user.essais}
-                                        </div>
-                                    )}
-                                    {user.essais > 5 && (
-                                        <div className="text-center dark:text-black rounded w-fit px-2 bg-red-300">
-                                            {user.essais}
-                                        </div>
+                                    {user.typejeu === "map" && (
+                                        <>
+                                            {user.essais <= 5 && (
+                                                <div className="rounded w-fit px-2 dark:text-black bg-green-300">
+                                                    {user.essais}
+                                                </div>
+                                            )}
+                                            {user.essais > 5 &&
+                                                user.essais <= 10 && (
+                                                    <div className="rounded w-fit px-2 dark:text-black bg-orange-300">
+                                                        {user.essais}
+                                                    </div>
+                                                )}
+                                            {user.essais > 10 && (
+                                                <div className="text-center dark:text-black rounded w-fit px-2 bg-red-300">
+                                                    {user.essais}
+                                                </div>
+                                            )}
+                                        </>
                                     )}
                                 </td>
                             </tr>
