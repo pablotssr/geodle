@@ -116,7 +116,7 @@ const MapPanel: React.FC = () => {
 
             if (distance === 0) {
                 icon = iconGreen;
-            } else if (distance < 100) {
+            } else if (distance < 150) {
                 icon = iconYellow;
             } else if (distance < 300) {
                 icon = iconOrange;

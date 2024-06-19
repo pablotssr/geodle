@@ -2,20 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-.leaflet-container{
+.leaflet-container {
     @apply h-[50vh];
     @apply w-[50vh];
 }
 
-.leaflet-control-attribution{
+.leaflet-control-attribution {
     display: none;
 }
 
-.suggestion{
+.suggestion {
     @apply cursor-pointer;
     @apply capitalize;
 }
 
-.suggestion:hover{
+.suggestion:hover {
     @apply bg-base-300;
+}
+
+.leaflet-control-zoom {
+    display: none;
 }
