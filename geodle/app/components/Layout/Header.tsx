@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import LeaderboardModal from "../Modal/LeaderboardModal";
 import TutorialModal from "../Modal/TutorialModal";
 import ThemeChanger from "./ThemeChanger";
 
@@ -11,7 +10,6 @@ const Header = () => {
                 Geodle
             </Link>
             <div className="flex flex-row gap-2">
-                {/* <LeaderboardModal/> */}
                 <TutorialModal/>
                 <ThemeChanger/>
             </div>

@@ -50,11 +50,13 @@ const TutorialModal = () => {
                                 </div>
                                 <div className="flex flex-row justify-evenly gap-4">
                                     <div className="flex flex-col items-center gap-1">
-                                        <Key
-                                            value={"Z"}
-                                            status={"guessing"}
-                                            type={"cell"}
-                                        />
+                                        <div className="cursor-default">
+                                            <Key
+                                                value={"Z"}
+                                                status={"guessing"}
+                                                type={"cell"}
+                                            />
+                                        </div>
                                         <span className="font-bold">
                                             Guessing
                                         </span>
